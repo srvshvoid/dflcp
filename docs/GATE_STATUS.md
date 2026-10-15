@@ -12,6 +12,8 @@ Synthetic smoke artifacts are ignored by git and are not research results.
 | Unit/integration slice | `make test` | 11 standard-library tests passed |
 | Source/packaging checks | `make lint && make check` | Python compilation, TOML parse, required-file and pin checks passed |
 | Deterministic smoke | `make smoke RUN_DIR=runs/final-check` | provenance, JSONL metrics, and checkpoint written; synthetic replay label printed |
+| Reproducibility | direct `run_smoke_experiment` comparison | two same-seed `metrics.jsonl` files were byte-for-byte identical (502 bytes) |
+| Dashboard HTTP | local `http.server` probe | HTTP 200 and the synthetic-replay banner were present |
 | Security replay | `make demo-security DEMO_RUN_DIR=runs/final` | clean/attack/defense stages and manifest written; no attack-success claim made |
 | Report plumbing | `make report` | generated ignored `docs/RESULTS.generated.md` from actual local run artifacts |
 | Container build | `docker build ...` | not run: Docker is not installed in the current environment |
