@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="FedForge local replay viewer for synthetic CPU smoke output">
+    <title>FedForge — Synthetic Replay Viewer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172033;
+        --muted: #5e6b80;
+        --line: #dbe2ec;
+        --surface: #ffffff;
+        --page: #f4f7fb;
+        --accent: #2e5aac;
+        --accent-dark: #21437f;
+        --warning: #7a4d00;
+        --warning-bg: #fff3cd;
+        --error: #9b1c1c;
+        --success: #17663d;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        line-height: 1.5;
+      }
+
+      header {
+        background: linear-gradient(135deg, #172b52, #244a8c);
+        color: #fff;
+        padding: 2.4rem max(1.25rem, calc((100vw - 1100px) / 2));
+      }
+
+      .eyebrow {
+        margin: 0 0 .55rem;
+        color: #d8e5ff;
+        font-size: .78rem;
+        font-weight: 800;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      h1, h2, p { margin-top: 0; }
+      h1 { margin-bottom: .55rem; font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.1; }
+      h2 { margin-bottom: .7rem; font-size: 1.2rem; }
+
+      .header-copy { max-width: 730px; color: #e4edff; }
+
+      .banner {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+        margin-top: 1rem;
+        padding: .55rem .8rem;
+        border: 1px solid #f4ca67;
+        border-radius: 999px;
+        background: #fff3cd;
+        color: #633f00;
+        font-size: .82rem;
+        font-weight: 900;
+        letter-spacing: .06em;
+      }
+
+      main {
+        display: grid;
+        gap: 1rem;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1.25rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        min-width: 0;
+        padding: 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: .8rem;
+        background: var(--surface);
+        box-shadow: 0 5px 18px rgba(31, 55, 92, .05);
+      }
+
+      .card p:last-child { margin-bottom: 0; }
+
+      .value {
+        margin: .25rem 0 0;
+        color: var(--accent-dark);
+        font-size: 1.35rem;
+        font-weight: 750;
+        overflow-wrap: anywhere;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: .78rem;
+        font-weight: 750;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .drop-zone {
+        display: grid;
+        gap: .7rem;
+        place-items: center;
+        min-height: 160px;
+        padding: 1.25rem;
+        border: 2px dashed #9eb4d8;
+        border-radius: .7rem;
+        background: #f8fbff;
+        text-align: center;
+      }
+
+      .drop-zone.is-dragging {
+        border-color: var(--accent);
+        background: #edf4ff;
+      }
+
+      input[type="file"] { max-width: 100%; }
+
+      button {
+        cursor: pointer;
+        border: 0;
+        border-radius: .45rem;
+        padding: .6rem .85rem;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+      }
+
+      button:hover, button:focus-visible { background: var(--accent-dark); }
+
+      .helper, .status, .footnote {
+        color: var(--muted);
+        font-size: .9rem;
+      }
+
+      .status { min-height: 1.5em; }
+      .status[data-kind="error"] { color: var(--error); }
+      .status[data-kind="success"] { color: var(--success); }
+
+      .table-wrap { overflow-x: auto; }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .9rem;
+      }
+
+      th, td {
+        padding: .65rem .7rem;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: .75rem;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+      }
+
+      code, pre {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      pre {
+        max-height: 280px;
+        margin: 0;
+        overflow: auto;
+        padding: .8rem;
+        border-radius: .45rem;
+        background: #172033;
+        color: #e9f0ff;
+        font-size: .78rem;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .notice {
+        border-left: 4px solid #e2a820;
+        background: var(--warning-bg);
+        color: var(--warning);
+      }
+
+      .empty { color: var(--muted); font-style: italic; }
+
+      footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.25rem 2rem;
+      }
+
+      @media (max-width: 760px) {
+        .grid { grid-template-columns: 1fr; }
+        header { padding-top: 1.7rem; padding-bottom: 1.7rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p class="eyebrow">FedForge / local replay viewer</p>
+      <h1>Synthetic replay, clearly labelled</h1>
+      <p class="header-copy">
+        Load a JSONL replay produced by the local CPU smoke path and inspect the
+        records exactly as supplied. This page has no network calls, chart
+        library, live service, or hidden result source.
+      </p>
+      <div class="banner" role="status">SYNTHETIC REPLAY — NOT A BENCHMARK</div>
+    </header>
+
+    <main>
+      <section class="card notice" aria-labelledby="scope-title">
+        <h2 id="scope-title">Evidence boundary</h2>
+        <p>
+          Values shown here are replay records from a local smoke fixture. They
+          are not evidence about a real dataset, model quality, privacy level,
+          attack resistance, or deployment performance. Real datasets, GPU
+          runs, Flower SecAgg+, and production services remain pending.
+        </p>
+        <p class="footnote">
+          The viewer does not calculate, smooth, rank, or compare metrics. It
+          displays loaded fields without turning them into benchmark claims.
+        </p>
+      </section>
+
+      <section class="card" aria-labelledby="load-title">
+        <h2 id="load-title">Load a local replay</h2>
+        <div class="drop-zone" id="drop-zone">
+          <div>
+            <strong>Choose a JSONL file or drop it here</strong>
+            <p class="helper">Expected input: one JSON object per line, such as a smoke metrics replay.</p>
+          </div>
+          <input id="file-input" type="file" accept=".jsonl,.json,application/json,text/plain">
+          <button id="clear-button" type="button">Clear replay</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">No replay loaded.</p>
+      </section>
+
+      <section class="grid" aria-label="Replay metadata">
+        <div class="card">
+          <div class="label">Source file</div>
+          <div class="value" id="source-value">—</div>
+        </div>
+        <div class="card">
+          <div class="label">Records loaded</div>
+          <div class="value" id="records-value">—</div>
+        </div>
+        <div class="card">
+          <div class="label">Declared status</div>
+          <div class="value" id="status-value">Synthetic / unverified</div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="metrics-title">
+        <h2 id="metrics-title">Recorded rows</h2>
+        <p class="helper">
+          This table is a transparent rendering of loaded rows. A blank table
+          means that no replay has been provided; it is not a zero result.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Round / event</th><th>Recorded fields</th></tr>
+            </thead>
+            <tbody id="rows-body">
+              <tr><td colspan="2" class="empty">No replay loaded.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="provenance-title">
+        <h2 id="provenance-title">Loaded provenance / raw records</h2>
+        <p class="helper">
+          Provenance is shown when it is present in the file. Inspect the raw
+          JSON before using a replay in a report.
+        </p>
+        <pre id="raw-output" aria-live="polite">No replay loaded.</pre>
+      </section>
+    </main>
+
+    <footer>
+      <p class="footnote">
+        FedForge's research evidence policy is documented in
+        <code>docs/RESULTS.md</code>. This static page is safe to serve from a
+        local HTTP server and intentionally has no external dependencies.
+      </p>
+    </footer>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const fileInput = document.getElementById("file-input");
+        const dropZone = document.getElementById("drop-zone");
+        const clearButton = document.getElementById("clear-button");
+        const status = document.getElementById("status");
+        const sourceValue = document.getElementById("source-value");
+        const recordsValue = document.getElementById("records-value");
+        const statusValue = document.getElementById("status-value");
+        const rowsBody = document.getElementById("rows-body");
+        const rawOutput = document.getElementById("raw-output");
+
+        function setStatus(message, kind) {
+          status.textContent = message;
+          status.dataset.kind = kind || "";
+        }
+
+        function displayValue(value) {
+          if (value === null || value === undefined) return "null";
+          if (typeof value === "string") return value;
+          try { return JSON.stringify(value); } catch (_) { return String(value); }
+        }
+
+        function parseReplay(text) {
+          const trimmed = text.trim();
+          if (!trimmed) return [];
+          if (trimmed.startsWith("[")) {
+            const parsed = JSON.parse(trimmed);
+            if (!Array.isArray(parsed)) throw new Error("JSON array input must contain objects");
+            return parsed;
+          }
+          return trimmed.split(/\r?\n/).map((line, index) => {
+            try {
+              return JSON.parse(line);
+            } catch (error) {
+              throw new Error(`Invalid JSON on line ${index + 1}: ${error.message}`);
+            }
+          });
+        }
+
+        function render(records, fileName) {
+          sourceValue.textContent = fileName || "pasted / local input";
+          recordsValue.textContent = String(records.length);
+          statusValue.textContent = "Synthetic / unverified";
+          rawOutput.textContent = records.length ? JSON.stringify(records, null, 2) : "No replay loaded.";
+          rowsBody.replaceChildren();
+
+          if (!records.length) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+            cell.colSpan = 2;
+            cell.className = "empty";
+            cell.textContent = "No replay loaded.";
+            row.appendChild(cell);
+            rowsBody.appendChild(row);
+            return;
+          }
+
+          records.forEach((record) => {
+            const row = document.createElement("tr");
+            const eventCell = document.createElement("td");
+            const fieldsCell = document.createElement("td");
+            const round = record && typeof record === "object" ? record.round : undefined;
+            const event = record && typeof record === "object" ? record.event : undefined;
+            eventCell.textContent = [round !== undefined ? `round ${displayValue(round)}` : "", event ? displayValue(event) : ""]
+              .filter(Boolean).join(" / ") || "record";
+            fieldsCell.textContent = displayValue(record);
+            row.append(eventCell, fieldsCell);
+            rowsBody.appendChild(row);
+          });
+        }
+
+        function clearReplay() {
+          fileInput.value = "";
+          render([], "—");
+          setStatus("No replay loaded.");
+        }
+
+        function loadFile(file) {
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const records = parseReplay(String(reader.result));
+              render(records, file.name);
+              setStatus(`Loaded ${records.length} record(s) from ${file.name}. Values are unverified replay data.`, "success");
+            } catch (error) {
+              clearReplay();
+              setStatus(error.message, "error");
+            }
+          };
+          reader.onerror = () => setStatus("The selected file could not be read.", "error");
+          reader.readAsText(file);
+        }
+
+        fileInput.addEventListener("change", () => loadFile(fileInput.files[0]));
+        clearButton.addEventListener("click", clearReplay);
+        ["dragenter", "dragover"].forEach((eventName) => {
+          dropZone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropZone.classList.add("is-dragging");
+          });
+        });
+        ["dragleave", "drop"].forEach((eventName) => {
+          dropZone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropZone.classList.remove("is-dragging");
+          });
+        });
+        dropZone.addEventListener("drop", (event) => loadFile(event.dataTransfer.files[0]));
+      })();
+    </script>
+  </body>
+</html>
