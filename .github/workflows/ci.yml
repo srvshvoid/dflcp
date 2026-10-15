@@ -1,0 +1,27 @@
+name: FedForge CPU smoke
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-smoke:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up pinned Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.2'
+      - name: Verify setup without downloads
+        run: make setup
+      - name: Run unit tests
+        run: make test
+      - name: Run packaging checks
+        run: make check
+      - name: Run deterministic smoke replay
+        run: make smoke RUN_DIR=runs/ci-smoke

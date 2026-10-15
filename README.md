@@ -168,13 +168,15 @@ Do not upload real sensitive data to this static viewer.
   citation-verification protocol; no unverified references are presented as
   support.
 - [`docs/RESULTS.md`](docs/RESULTS.md) — what may and may not be reported.
+- [`docs/GATE_STATUS.md`](docs/GATE_STATUS.md) — actual checks and partial gate matrix.
 - [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) — exact demo sequence and
   honest narration.
 
 ## Contributing evidence
 
-Add a dependency only after pinning it in `requirements.lock` and proving that
-the CPU smoke path remains runnable offline. Add a dataset only with a filled
+The current CI workflow runs the same CPU smoke checks; it does not claim to
+run the pending Docker/Flower/GPU stack. Add a dependency only after pinning it
+in `requirements.lock` and proving that the CPU smoke path remains runnable offline. Add a dataset only with a filled
 verification record, license evidence, disjoint split checks, and an approved
 retention policy. Replace a `pending` result with a measured result only when
 the run directory contains the configuration, seed, provenance, raw metrics,

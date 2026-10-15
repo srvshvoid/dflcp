@@ -1,0 +1,12 @@
+# Keep generated/local material out of the build context.
+.git
+.venv
+runs
+__pycache__
+*.py[cod]
+.env
+.env.*
+!.env.example
+.pytest_cache
+.mypy_cache
+.ruff_cache

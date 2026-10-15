@@ -75,7 +75,7 @@ lint:
 	@if test -d tests; then $(PYTHON) -m compileall -q tests; fi
 
 check: lint
-	$(PYTHON) -c 'import pathlib, tomllib; root=pathlib.Path("."); tomllib.load((root/"pyproject.toml").open("rb")); required=[root/"README.md",root/"Dockerfile",root/"dashboard/index.html",root/"docs/ARCHITECTURE.md",root/"docs/DATASET_VERIFICATION.md",root/"docs/DEMO_SCRIPT.md",root/"docs/ETHICS.md",root/"docs/LITERATURE_VERIFICATION.md",root/"docs/RESULTS.md",root/"docs/THREAT_MODEL.md"]; missing=[str(p) for p in required if not p.is_file()]; assert not missing, "missing required files: " + ", ".join(missing)'
+	$(PYTHON) -c 'import pathlib, tomllib; root=pathlib.Path("."); tomllib.load((root/"pyproject.toml").open("rb")); required=[root/"README.md",root/"Dockerfile",root/"dashboard/index.html",root/"docs/ARCHITECTURE.md",root/"docs/DATASET_VERIFICATION.md",root/"docs/DEMO_SCRIPT.md",root/"docs/ETHICS.md",root/"docs/GATE_STATUS.md",root/"docs/LITERATURE_VERIFICATION.md",root/"docs/RESULTS.md",root/"docs/THREAT_MODEL.md",root/"scripts/render_results.py",root/"scripts/security_demo.py"]; missing=[str(p) for p in required if not p.is_file()]; assert not missing, "missing required files: " + ", ".join(missing)'
 	@test -s requirements.lock
 	@test "$(shell tr -d '\r\n' < .python-version)" = "3.11.2"
 
