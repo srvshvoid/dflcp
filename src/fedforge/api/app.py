@@ -36,9 +36,22 @@ class RunRepository:
         if not run_id or Path(run_id).name != run_id or run_id in {".", ".."}:
             raise RunNotFoundError(run_id)
         path = self.runs_root / run_id
-        if not path.is_dir():
-            raise RunNotFoundError(run_id)
-        return path
+        if path.is_dir():
+            return path
+        # Allow callers to use the provenance run_id returned by older replay
+        # artifacts while keeping path traversal impossible.
+        if self.runs_root.is_dir():
+            for candidate in self.runs_root.iterdir():
+                provenance_path = candidate / "provenance.json"
+                if not candidate.is_dir() or not provenance_path.is_file():
+                    continue
+                try:
+                    provenance = self._read_json(provenance_path)
+                except (OSError, ValueError, json.JSONDecodeError):
+                    continue
+                if provenance.get("run_id") == run_id:
+                    return candidate
+        raise RunNotFoundError(run_id)
 
     @staticmethod
     def _read_json(path: Path) -> dict[str, Any]:
@@ -77,7 +90,10 @@ class RunRepository:
             metrics = self._read_jsonl(path / "metrics.jsonl")
             summaries.append(
                 {
-                    "id": provenance.get("run_id", path.name),
+                    # The directory is the stable URL key. A caller can still
+                    # inspect the run's internal provenance id separately.
+                    "id": path.name,
+                    "run_id": provenance.get("run_id", path.name),
                     "directory": path.name,
                     "seed": provenance.get("seed"),
                     "git_commit": provenance.get("git_commit"),

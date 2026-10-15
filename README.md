@@ -80,7 +80,9 @@ Prepare the labelled replay used by the demo script:
 
 ```sh
 make demo
+make demo-security                # labelled synthetic clean/attack/defense replay
 make report                       # optional, writes docs/RESULTS.generated.md
+make reproduce RQ=1              # validates a preregistered contract; real run pending
 ```
 
 `make demo` does not open a browser or claim a live service. It creates
@@ -94,7 +96,10 @@ make run PORT=8000
 Open <http://127.0.0.1:8000>, choose the generated `metrics.jsonl`, and keep
 the `SYNTHETIC REPLAY — NOT A BENCHMARK` banner visible during any recording.
 The full talk track and failure cases are in
-[`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
+[`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). `make demo-security` runs three
+synthetic stages (clean, semantic label-flip, and SecAgg-off coordinate
+median), records their actual artifacts, and explicitly makes no claim that
+the toy attack succeeds or that the defense recovers recall.
 
 ## Packaging and checks
 

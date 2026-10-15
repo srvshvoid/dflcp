@@ -74,3 +74,16 @@ client updates, and model checkpoints require an explicit data governance
 decision before they cross a local or hosted boundary. See
 [`DATASET_VERIFICATION.md`](DATASET_VERIFICATION.md),
 [`THREAT_MODEL.md`](THREAT_MODEL.md), and [`ETHICS.md`](ETHICS.md).
+
+## API and experiment contract boundary
+
+`src/fedforge/api/` provides a standard-library `RunRepository` for provenance
+and JSONL metrics plus an optional FastAPI adapter. The adapter exposes only
+read-only replay routes and an explicit numeric smoke endpoint; its media
+`/detect` route returns `501` until file sniffing, sandboxed decode, face
+extraction, calibration, and retention controls are implemented.
+
+`configs/experiments/RQ1.yaml` through `RQ5.yaml` are preregistration records
+for hypotheses, null hypotheses, and success criteria. They do not contain
+results. `scripts/security_demo.py` records a synthetic three-stage replay and
+keeps the SecAgg/plaintext-robustness incompatibility visible.

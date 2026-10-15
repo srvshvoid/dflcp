@@ -1,0 +1,18 @@
+{
+  "seed": 17,
+  "n_videos": 24,
+  "frames_per_video": 4,
+  "n_features": 4,
+  "source_count": 8,
+  "n_clients": 4,
+  "rounds": 3,
+  "local_epochs": 2,
+  "learning_rate": 0.25,
+  "algorithm": "fedavg",
+  "aggregator": "fedavg",
+  "secagg_enabled": false,
+  "personalized_local_head": true,
+  "test_fraction": 0.25,
+  "attack_generator": null,
+  "malicious_clients": ["client-0"]
+}

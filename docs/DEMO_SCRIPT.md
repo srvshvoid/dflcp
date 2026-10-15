@@ -51,6 +51,21 @@ packaging-only. Do not replace the missing implementation with made-up output.
    [`docs/THREAT_MODEL.md`](THREAT_MODEL.md). Explain that a real result needs
    those records plus raw, reproducible artifacts.
 
+## Optional security replay
+
+To exercise the attack/defense configuration boundary without real media, run:
+
+```sh
+make demo-security
+```
+
+This writes clean, targeted-label-flip, and SecAgg-off coordinate-median
+stages below `runs/demo-security/` plus a manifest. It is a **synthetic replay**:
+the script records actual metrics but does not assert attack success, target
+recall collapse, or defense recovery. The defense stage is SecAgg-off because
+plaintext robust aggregators cannot inspect individual updates hidden by secure
+aggregation.
+
 ## Failure states to show honestly
 
 - If `make setup` rejects the interpreter, install/use exactly Python 3.11.2;

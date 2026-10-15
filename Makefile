@@ -11,7 +11,7 @@ DEMO_RUN_DIR ?= runs/demo
 SMOKE_CONFIG ?= configs/smoke.json
 PORT ?= 8000
 
-.PHONY: help setup test smoke demo report run lint check clean
+.PHONY: help setup test smoke demo demo-security report reproduce run lint check clean
 
 help:
 	@printf '%s\n' \
@@ -20,6 +20,8 @@ help:
 		'make smoke  Run the deterministic CPU smoke command into RUN_DIR' \
 		'make demo   Prepare a labelled replay in DEMO_RUN_DIR' \
 		'make report  Render a labelled replay index from runs/' \
+		'make demo-security  Run clean/attack/defense synthetic stages' \
+		'make reproduce RQ=1  Validate a preregistered RQ contract' \
 		'make run    Serve dashboard/ locally on PORT' \
 		'make lint   Compile Python sources without third-party tooling' \
 		'make check  Validate packaging/dashboard/docs and run lint'
@@ -54,6 +56,15 @@ demo:
 report:
 	PYTHONPATH="$(PYTHONPATH_VALUE)" $(PYTHON) scripts/render_results.py --runs runs --output docs/RESULTS.generated.md
 	@printf '%s\n' 'Generated docs/RESULTS.generated.md from actual run artifacts; it is synthetic/unverified.'
+
+demo-security:
+	PYTHONPATH="$(PYTHONPATH_VALUE)" $(PYTHON) scripts/security_demo.py --output "$(DEMO_RUN_DIR)-security"
+	@printf '%s\n' 'Synthetic security replay only; inspect the manifest before presenting it.'
+
+reproduce:
+	@test -n "$(RQ)" || { printf '%s\n' 'Usage: make reproduce RQ=1 (or another configured RQ number).' >&2; exit 2; }
+	@test -f "configs/experiments/RQ$(RQ).yaml" || { printf '%s\n' "No preregistered contract for RQ$(RQ)." >&2; exit 2; }
+	@printf '%s\n' "RQ$(RQ) contract is present. Real-data reproduction remains pending dataset/Flower/GPU prerequisites; no benchmark is claimed."
 
 run:
 	$(PYTHON) -m http.server "$(PORT)" --directory dashboard

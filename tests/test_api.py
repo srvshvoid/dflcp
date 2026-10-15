@@ -21,8 +21,13 @@ class ApiBoundaryTests(unittest.TestCase):
             repository = RunRepository(root / "runs")
             summaries = repository.list_runs()
             self.assertEqual(len(summaries), 1)
-            run_id = summaries[0]["directory"]
+            run_id = summaries[0]["id"]
             payload = repository.get_run(run_id)
+            self.assertEqual(payload["id"], run_id)
+            self.assertEqual(
+                repository.get_run(summaries[0]["run_id"])["id"],
+                summaries[0]["run_id"],
+            )
             self.assertEqual(len(payload["metrics"]), 3)
             self.assertEqual(payload["evidence_status"], "synthetic-unverified")
             with self.assertRaises(RunNotFoundError):
