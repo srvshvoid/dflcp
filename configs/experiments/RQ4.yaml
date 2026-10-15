@@ -1,0 +1,6 @@
+rq_id: RQ4
+question: Targeted backdoor versus defenses
+hypothesis: A targeted attacker can reduce target-generator recall without necessarily collapsing aggregate AUC, while plaintext robust defenses may impose honest-client rejection cost.
+null_hypothesis: The attack does not change target recall/ASR beyond the declared interval, or defenses do not improve it.
+success_criterion: Report ASR, per-generator recall, aggregate AUC, false rejection, and SecAgg compatibility separately.
+status: smoke_primitive_only_real_attack_pending

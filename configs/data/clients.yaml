@@ -1,0 +1,30 @@
+# Declarative client sketch. Dataset access/license/split facts are pending verification.
+status: pending_verification
+clients:
+  - id: P1
+    name: ShortVideoApp
+    datasets: [FaceForensics++]
+    forgery_families: [DeepFakes, Face2Face]
+    local_real_share: disjoint_pristine_reals
+  - id: P2
+    name: SocialNet
+    datasets: [FaceForensics++]
+    forgery_families: [FaceSwap, NeuralTextures]
+    local_real_share: disjoint_pristine_reals
+  - id: P3
+    name: NewsDesk
+    datasets: [Celeb-DF-v2]
+    forgery_families: [high_quality_swap]
+  - id: P4
+    name: WildForum
+    datasets: [WildDeepfake]
+    forgery_families: [in_the_wild]
+  - id: P5
+    name: Messaging
+    datasets: [DFDC]
+    forgery_families: [demographic_diversity]
+    enabled: false
+held_out:
+  name: future
+  datasets: [DF40]
+  use: evaluation_only

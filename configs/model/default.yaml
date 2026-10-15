@@ -1,0 +1,11 @@
+# Intended real-data model configuration; not enabled by the CPU smoke slice.
+status: pending_gpu_and_dataset_validation
+input_size: [224, 224]
+frame_backbone: efficientnet_b0_features_only
+transformer_width: 192
+transformer_blocks: 2
+attention_heads: 3
+video_aggregation: mean_probability
+normalization: group_norm_for_dp
+auxiliary_generator_head: false
+smoke_model: logistic_frame_model

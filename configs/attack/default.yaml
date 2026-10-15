@@ -1,0 +1,11 @@
+# Security-lab preregistration sketch; smoke currently supports semantic label flip only.
+status: smoke_label_flip_only
+enabled: true
+attacker_type: targeted_semantic_label_flip
+target_generator: diffusion
+malicious_clients: [client-0]
+start_round: 2
+poison_fraction: VERIFY_FROM_RUN
+boost_factor: null
+trigger: not_implemented
+adaptive_attacker: not_implemented

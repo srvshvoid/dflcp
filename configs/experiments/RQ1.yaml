@@ -1,0 +1,6 @@
+rq_id: RQ1
+question: Cost of natural non-IID
+hypothesis: Federated source-skewed training underperforms centralized pooled training on in-distribution evaluation.
+null_hypothesis: The measured performance difference is zero after accounting for seed variation.
+success_criterion: Report the video-level difference with at least three preregistered seeds and video-bootstrap confidence intervals.
+status: preregistered_pending_real_data

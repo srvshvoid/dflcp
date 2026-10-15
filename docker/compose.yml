@@ -1,0 +1,13 @@
+# Honest local compose profile for the static replay viewer only.
+# Live Flower/PostgreSQL/Redis deployment is pending and intentionally absent.
+services:
+  dashboard:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    profiles: [dev]
+    ports:
+      - "8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp

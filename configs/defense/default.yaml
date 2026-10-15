@@ -1,0 +1,7 @@
+# Robust defenses require plaintext per-client updates and therefore SecAgg-off mode.
+status: toy_numeric_primitives_only
+secagg_compatibility:
+  secagg_on: [client_side_clipping, additive_noise]
+  secagg_off: [trimmed_mean, coordinate_median, krum, cosine_trust]
+default_aggregator: fedavg
+honest_client_rejection_rate: measured_per_run

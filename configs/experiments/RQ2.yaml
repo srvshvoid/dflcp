@@ -1,0 +1,6 @@
+rq_id: RQ2
+question: Does personalization help?
+hypothesis: A shared backbone with a local head improves local-client test performance but may not improve cross-client or held-out-generator performance.
+null_hypothesis: Personalization does not change either evaluation family beyond the declared uncertainty interval.
+success_criterion: Compare FedAvg, FedProx, and personalized-head variants under the same budget and seeds.
+status: preregistered_pending_real_data

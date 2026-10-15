@@ -1,0 +1,11 @@
+# Flower integration contract. Verify the installed Flower API before enabling.
+status: pending_flower_integration
+flower_version: VERIFY_BEFORE_PINNING
+mode: simulation
+rounds: 3
+local_epochs: 1
+participation_rate: 1.0
+algorithm: fedavg
+fedprox_mu: 0.01
+personalized_head: true
+client_updates: shared_backbone_only

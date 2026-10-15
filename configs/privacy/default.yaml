@@ -1,0 +1,9 @@
+# Privacy configuration is a declaration, not a proof of protection.
+status: pending_secagg_and_dp_measurements
+secagg_enabled: false
+secagg_implementation: flower_secagg_plus_pending
+client_level_dp_enabled: false
+sample_level_dp_enabled: false
+delta: VERIFY_FROM_DATASET_CARD
+clipping_norm: VERIFY_FROM_RUN
+quantization_bits: VERIFY_FROM_FLOWER_VERSION

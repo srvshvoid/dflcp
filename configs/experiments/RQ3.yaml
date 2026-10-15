@@ -1,0 +1,6 @@
+rq_id: RQ3
+question: Cost of privacy
+hypothesis: SecAgg quantization/clipping and client-level DP reduce utility or increase runtime/communication cost.
+null_hypothesis: Privacy mechanisms have no measurable utility or systems cost under matched seeds.
+success_criterion: Report matched SecAgg-off/on and epsilon utility curves; no privacy claim without mechanism/accountant evidence.
+status: preregistered_pending_real_data

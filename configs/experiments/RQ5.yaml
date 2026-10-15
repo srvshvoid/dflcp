@@ -1,0 +1,6 @@
+rq_id: RQ5
+question: Generalization to unseen generator families
+hypothesis: Federation may act as an implicit regularizer for unseen-generator generalization, but a null or centralized advantage is plausible.
+null_hypothesis: Federated and centralized models have equal held-out-generator performance after matched data and compute.
+success_criterion: Evaluate only on a verified held-out DF40 split with no selection leakage and report mean/std plus video-bootstrap confidence intervals.
+status: preregistered_pending_real_data
