@@ -15,6 +15,7 @@ smoke command:
 - measured **Flower** federation and Flower SecAgg+ integration;
 - the production **Next.js** dashboard and live API path;
 - **PostgreSQL** persistence and **Redis**/queue deployment.
+- image/video multipart inference, face crops, calibration, and explanation maps.
 
 No benchmark number, generalization claim, privacy guarantee, attack result, or
 deployment capacity is reported by this package. See
@@ -79,6 +80,7 @@ Prepare the labelled replay used by the demo script:
 
 ```sh
 make demo
+make report                       # optional, writes docs/RESULTS.generated.md
 ```
 
 `make demo` does not open a browser or claim a live service. It creates
@@ -106,7 +108,24 @@ make check      # lint plus packaging/docs/dashboard/file checks
 
 `make check` does not replace `make test`; run both for a source checkout.
 The `pyproject.toml` has no runtime dependencies and discovers packages below
-`src/`.
+`src/`. `make report` reads only actual run artifacts and writes a clearly
+labelled replay index to the ignored file `docs/RESULTS.generated.md`; it never
+turns synthetic values into a benchmark table.
+
+
+## Optional read-only API boundary
+
+The standard-library `fedforge.api.RunRepository` reads the same provenance and
+JSONL artifacts without a database. The optional `create_fastapi_app` adapter
+exposes `/health`, `/runs`, `/runs/{id}`, `/runs/{id}/rounds`, and the explicit
+`/privacy/payload-manifest` contract when a separately reviewed FastAPI stack
+is installed. `/detect` returns a documented `501` for image/video uploads in
+this slice; `/detect/smoke` is numeric-feature checkpoint plumbing only. It must
+not be described as the requested media inference service.
+
+Pre-registered research contracts live under [`configs/`](configs/), including
+RQ1-RQ5 hypotheses, null hypotheses, and success criteria. They contain no
+measured result.
 
 ## Container build and local deployment
 

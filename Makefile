@@ -11,7 +11,7 @@ DEMO_RUN_DIR ?= runs/demo
 SMOKE_CONFIG ?= configs/smoke.json
 PORT ?= 8000
 
-.PHONY: help setup test smoke demo run lint check clean
+.PHONY: help setup test smoke demo report run lint check clean
 
 help:
 	@printf '%s\n' \
@@ -19,6 +19,7 @@ help:
 		'make test   Run the repository test suite with the stdlib unittest runner' \
 		'make smoke  Run the deterministic CPU smoke command into RUN_DIR' \
 		'make demo   Prepare a labelled replay in DEMO_RUN_DIR' \
+		'make report  Render a labelled replay index from runs/' \
 		'make run    Serve dashboard/ locally on PORT' \
 		'make lint   Compile Python sources without third-party tooling' \
 		'make check  Validate packaging/dashboard/docs and run lint'
@@ -49,6 +50,10 @@ demo:
 		'Synthetic replay prepared; dashboard/index.html is the viewer.' \
 		"Serve it with: $(MAKE) run PORT=$(PORT)" \
 		"Then choose $(DEMO_RUN_DIR)/metrics.jsonl in the file picker."
+
+report:
+	PYTHONPATH="$(PYTHONPATH_VALUE)" $(PYTHON) scripts/render_results.py --runs runs --output docs/RESULTS.generated.md
+	@printf '%s\n' 'Generated docs/RESULTS.generated.md from actual run artifacts; it is synthetic/unverified.'
 
 run:
 	$(PYTHON) -m http.server "$(PORT)" --directory dashboard

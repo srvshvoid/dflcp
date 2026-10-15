@@ -16,3 +16,6 @@ runs/*
 !.env.example
 .vscode/
 .idea/
+
+# Generated evidence index
+docs/RESULTS.generated.md
