@@ -67,7 +67,7 @@ reproduce:
 	@printf '%s\n' "RQ$(RQ) contract is present. Real-data reproduction remains pending dataset/Flower/GPU prerequisites; no benchmark is claimed."
 
 run:
-	$(PYTHON) -m http.server "$(PORT)" --directory dashboard
+	$(PYTHON) run.py --port "$(PORT)"
 
 lint:
 	@test -d src || { printf '%s\n' 'src/ is missing; nothing to lint in this checkout.' >&2; exit 1; }

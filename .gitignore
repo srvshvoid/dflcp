@@ -1,21 +1,54 @@
-# Local environments and caches
-.venv/
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+
+# C & C++ extensions
+*.dll
+*.dylib
+*.exe
+
+# Environments and packaging
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Testing & Linting
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+htmlcov/
 
-# Reproducible run outputs are generated, never committed
+# Logs & temp files
+*.log
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Media uploads & local test artifacts
 runs/*
 !runs/.gitkeep
+*.mp4
+*.avi
+*.mov
 
-# Local secrets and editor state
+# Local secrets & editor state
 .env
 .env.*
 !.env.example
 .vscode/
 .idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
 
-# Generated evidence index
+# Generated documentation/evidence
 docs/RESULTS.generated.md

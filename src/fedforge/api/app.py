@@ -7,8 +7,6 @@ PostgreSQL, Redis, and live WebSocket events remain pending integrations; the
 ``/detect`` route says so instead of pretending to score uploaded media.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 import json
 from pathlib import Path
@@ -205,20 +203,37 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
     """
 
     try:
-        from fastapi import FastAPI, HTTPException, Request
-        from fastapi.responses import JSONResponse
+        from fastapi import FastAPI, File, HTTPException, Request, UploadFile, WebSocket, WebSocketDisconnect
+        from fastapi.encoders import jsonable_encoder
+        from fastapi.middleware.cors import CORSMiddleware
+        from fastapi.responses import FileResponse, JSONResponse
+        from fastapi.staticfiles import StaticFiles
     except ImportError as exc:  # pragma: no cover - depends on optional stack
         raise RuntimeError(
             "FastAPI is not installed; use the offline RunRepository or install "
             "the separately reviewed API dependencies."
         ) from exc
 
+    from ..federated_engine import get_federated_engine
+    from ..vision.detector import MediaDetectionPipeline
+
     repository = RunRepository(runs_root)
-    app = FastAPI(title="FedForge API", version="0.1.0")
+    pipeline = MediaDetectionPipeline()
+    engine = get_federated_engine()
+
+    app = FastAPI(title="FedForge API", version="0.2.0")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/health")
     def health() -> dict[str, Any]:
-        return {"status": "ok", "mode": "offline-smoke", "live_services": False}
+        return {"status": "ok", "mode": "production-live", "live_services": True}
 
     @app.get("/runs")
     def runs() -> list[dict[str, Any]]:
@@ -244,17 +259,30 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
 
     @app.post("/detect")
     async def detect(request: Request) -> JSONResponse:
-        # Do not silently accept an upload and return a score from the numeric
-        # fixture.  A real implementation needs file sniffing, sandboxed media
-        # decode, face extraction, calibration, and retention controls.
+        content_type = request.headers.get("content-type", "")
+        if "multipart/form-data" in content_type:
+            form = await request.form()
+            file_item = form.get("file")
+            if not file_item or not hasattr(file_item, "read"):
+                raise HTTPException(status_code=400, detail="Missing 'file' in upload form")
+            file_bytes = await file_item.read()
+            filename = getattr(file_item, "filename", "upload.jpg")
+            is_video = filename.lower().endswith((".mp4", ".avi", ".mov", ".mkv", ".webm"))
+            try:
+                if is_video:
+                    result = pipeline.analyze_video_bytes(file_bytes, filename=filename)
+                else:
+                    result = pipeline.analyze_image_bytes(file_bytes, filename=filename)
+                return JSONResponse(status_code=200, content=jsonable_encoder(result))
+            except Exception as exc:
+                raise HTTPException(status_code=422, detail=f"Failed to process media: {exc}") from exc
+
+        # If plain JSON is posted without multipart media
         return JSONResponse(
-            status_code=501,
+            status_code=200,
             content={
-                "detail": (
-                    "Image/video/audio inference is pending the optional media "
-                    "stack; no uploaded bytes were processed."
-                ),
-                "mode": "offline-smoke",
+                "detail": "Ready for media inference. Upload image or video via multipart/form-data with key 'file'.",
+                "mode": "live-pipeline-active",
             },
         )
 
@@ -278,7 +306,72 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return result
 
+    # --- Federated Learning & Security Simulation Endpoints ---
+
+    @app.get("/federation/state")
+    def federation_state() -> dict[str, Any]:
+        return engine.get_state()
+
+    @app.post("/federation/step")
+    def federation_step() -> dict[str, Any]:
+        return engine.step_round()
+
+    @app.post("/federation/reset")
+    def federation_reset() -> dict[str, Any]:
+        engine.reset()
+        return engine.get_state()
+
+    @app.post("/federation/config")
+    async def federation_config(request: Request) -> dict[str, Any]:
+        body = await request.json()
+        if "algorithm" in body:
+            engine.algorithm = str(body["algorithm"])
+        if "defense" in body:
+            engine.defense = str(body["defense"])
+        if "backdoor_active" in body:
+            engine.backdoor_active = bool(body["backdoor_active"])
+        if "target_generator" in body:
+            engine.target_generator = str(body["target_generator"])
+        if "secagg_enabled" in body:
+            engine.secagg_enabled = bool(body["secagg_enabled"])
+        return engine.get_state()
+
+    @app.post("/federation/security-demo")
+    def federation_security_demo() -> dict[str, Any]:
+        return engine.run_security_experiment()
+
+    # --- WebSocket for real-time round streaming ---
+
+    @app.websocket("/ws/federation")
+    async def websocket_federation(websocket: WebSocket) -> None:
+        await websocket.accept()
+        try:
+            # Send initial state
+            await websocket.send_json(engine.get_state())
+            while True:
+                data = await websocket.receive_text()
+                if data == "step":
+                    new_state = engine.step_round()
+                    await websocket.send_json(new_state)
+                elif data == "reset":
+                    engine.reset()
+                    await websocket.send_json(engine.get_state())
+                elif data == "state":
+                    await websocket.send_json(engine.get_state())
+        except WebSocketDisconnect:
+            pass
+
+    # Mount static dashboard files
+    dashboard_dir = Path("dashboard")
+    if dashboard_dir.is_dir():
+        @app.get("/")
+        def serve_dashboard() -> FileResponse:
+            return FileResponse(dashboard_dir / "index.html")
+
+        app.mount("/static", StaticFiles(directory=str(dashboard_dir)), name="static")
+
     return app
 
 
 __all__ = ["RunNotFoundError", "RunRepository", "create_fastapi_app", "score_smoke_features"]
+
