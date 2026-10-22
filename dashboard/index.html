@@ -1611,11 +1611,37 @@
           confidence: 89.5,
           face_details: [{
             crop_preview: imgs.crop,
-            attention_heatmap: imgs.heat
+            attention_heatmap: imgs.heat,
+            ela_map: imgs.heat,
+            noise_map: imgs.heat,
+            fft_map: imgs.heat,
+            pixel_forensics: {
+              ela_compression_anomaly: 0.85,
+              noise_residual_inconsistency: 0.74,
+              boundary_seam_anomaly: 0.91,
+              fft_spectral_anomaly: 0.42
+            }
           }],
           moderation_report: {
             findings_narrative: 'Color blending and frequency mismatch detected along outer facial perimeter. Attention module localized artificial warping around boundary landmarks.',
             recommendation: 'FLAG FOR SAFETY AUDIT / RESTRICT USER MONETIZATION'
+          },
+          forensic_certificate: {
+            case_id: 'FF-CASE-DEMO01',
+            timestamp_utc: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
+            filename: 'demo_celeb_faceswap.jpg',
+            sha256_fingerprint: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+            primary_verdict: 'LIKELY_SYNTHETIC',
+            overall_anomaly_score: 0.895,
+            confidence_rating: '89.5%',
+            faces_inspected: 1,
+            pixel_artifact_breakdown: {
+              ela_compression_anomaly: 0.85,
+              noise_residual_inconsistency: 0.74,
+              boundary_seam_anomaly: 0.91,
+              fft_spectral_anomaly: 0.42
+            },
+            chain_of_custody_signature: 'VERIFIED_AUDIT_LOG_ECDSA_VALID'
           }
         });
       } else if (type === 'authentic') {
@@ -1624,15 +1650,41 @@
           media_type: 'image',
           filename: 'demo_natural_camera.jpg',
           verdict: 'AUTHENTIC',
-          overall_score: 0.082,
-          confidence: 91.8,
+          overall_score: 0.012,
+          confidence: 98.8,
           face_details: [{
             crop_preview: imgs.crop,
-            attention_heatmap: imgs.heat
+            attention_heatmap: imgs.heat,
+            ela_map: imgs.heat,
+            noise_map: imgs.heat,
+            fft_map: imgs.heat,
+            pixel_forensics: {
+              ela_compression_anomaly: 0.02,
+              noise_residual_inconsistency: 0.01,
+              boundary_seam_anomaly: 0.00,
+              fft_spectral_anomaly: 0.01
+            }
           }],
           moderation_report: {
             findings_narrative: 'No synthetic manipulation signatures detected. Color gradients, skin texture pores, and optical camera noise profiles exhibit organic camera characteristics.',
             recommendation: 'PASS / NO MODERATION ACTION'
+          },
+          forensic_certificate: {
+            case_id: 'FF-CASE-DEMO02',
+            timestamp_utc: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
+            filename: 'demo_natural_camera.jpg',
+            sha256_fingerprint: 'a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0',
+            primary_verdict: 'AUTHENTIC',
+            overall_anomaly_score: 0.012,
+            confidence_rating: '98.8%',
+            faces_inspected: 1,
+            pixel_artifact_breakdown: {
+              ela_compression_anomaly: 0.02,
+              noise_residual_inconsistency: 0.01,
+              boundary_seam_anomaly: 0.00,
+              fft_spectral_anomaly: 0.01
+            },
+            chain_of_custody_signature: 'VERIFIED_AUDIT_LOG_ECDSA_VALID'
           }
         });
       }
