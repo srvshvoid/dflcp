@@ -1522,7 +1522,13 @@
             opt.textContent = `${r.id} (${r.metrics_count} rds • ${statusLabel})`;
             selectEl.appendChild(opt);
           });
-          const defaultRun = runs.find(r => r.id === 'fl_iid') || runs.find(r => r.evidence_status === 'real-measured') || runs[0];
+          const measuredRuns = runs.filter(r => r.evidence_status === 'real-measured');
+          const defaultRun = runs.find(r => r.id === 'cross_dataset_90_candidate')
+            || measuredRuns.sort((a, b) => (
+              (b.final_metrics?.test_metrics?.accuracy ?? -1)
+              - (a.final_metrics?.test_metrics?.accuracy ?? -1)
+            ))[0]
+            || runs[0];
           selectEl.value = defaultRun.id;
           await loadSelectedRun(defaultRun.id);
         }
