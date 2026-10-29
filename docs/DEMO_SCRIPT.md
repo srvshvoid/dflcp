@@ -1,51 +1,32 @@
-# FedForge demo script
+# FedForge final-project runbook
 
-This script demonstrates reproducible packaging and transparent replay
-handling. It does not demonstrate a real dataset, GPU model, Flower network,
-secure aggregation, or production deployment.
+This runbook starts the implemented media API and federated-learning
+dashboard. It is suitable for a project presentation, while the CIFAKE
+dataset boundary and the `INCONCLUSIVE` safety state must remain visible.
 
 ## Preparation
 
-Use a clean checkout with Python 3.11.2 and `make`:
+From the repository root:
 
 ```sh
-python3 --version
-make setup
-make test
-make check
+```powershell
+$env:PYTHONPATH="S:\CLG\3SEM1\DFL\CP\src"
+python -m pytest -q
+python run.py --port 8000
+```
 ```
 
-If the source package or tests are absent, stop and say that the checkout is
-packaging-only. Do not replace the missing implementation with made-up output.
+Open <http://127.0.0.1:8000>.
 
 ## Walkthrough
 
-1. **Show the boundary.** Open this document and the top of
-   `dashboard/index.html`. Point to the `SYNTHETIC REPLAY — NOT A BENCHMARK`
-   banner and the pending integrations in the README.
-2. **Run the smoke path.** In a terminal run:
+   1. Upload an authentic image and show `AUTHENTIC` or `INCONCLUSIVE`.
+   2. Upload a benchmark synthetic image and show `LIKELY_SYNTHETIC`.
+   3. Open the federated tab and run several rounds.
+   4. Run the security experiment and compare clean, attack, and defense stages.
+   5. Explain that clients send model updates, not raw uploaded images.
 
-   ```sh
-   make smoke RUN_DIR=runs/demo
-   ```
-
-   Explain that the command is expected to produce `provenance.json` and
-   `metrics.jsonl`, not a research conclusion. Show the provenance fields
-   before opening the metrics file.
-3. **Serve the viewer.** In another terminal run:
-
-   ```sh
-   make run PORT=8000
-   ```
-
-   Visit <http://127.0.0.1:8000>, choose `runs/demo/metrics.jsonl`, and show
-   the source name, record count, raw JSON, and transparent table. The viewer
-   does not compute a score or contact a service.
-4. **State the limitation.** Say: “These are synthetic CPU replay records.
-   They do not establish real-data accuracy, privacy, security, or deployment
-   performance. Real datasets, GPU runs, Flower, Next.js, PostgreSQL, and
-   Redis are pending.”
-5. **Close with the evidence path.** Point to
+   Close with the evidence path. Point to
    [`docs/RESULTS.md`](RESULTS.md),
    [`docs/DATASET_VERIFICATION.md`](DATASET_VERIFICATION.md), and
    [`docs/THREAT_MODEL.md`](THREAT_MODEL.md). Explain that a real result needs

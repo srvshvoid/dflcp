@@ -35,6 +35,7 @@ temp/
 # Media uploads & local test artifacts
 runs/*
 !runs/.gitkeep
+data/
 *.mp4
 *.avi
 *.mov

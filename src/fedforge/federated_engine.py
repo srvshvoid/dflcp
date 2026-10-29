@@ -58,9 +58,9 @@ class FederatedEngine:
         self.defense = "none"  # none, krum, trimmed_mean, coordinate_median
         self.backdoor_active = False
         self.target_generator = "Face2Face"
-        self.secagg_enabled = True
-        self.dp_epsilon = 0.0
-        self.dp_delta = 1e-5
+        self.secagg_enabled = False
+        self.dp_epsilon: Optional[float] = None
+        self.dp_delta: Optional[float] = None
 
         # Initialize the 4 simulated platform clients
         self.clients = [
@@ -75,6 +75,7 @@ class FederatedEngine:
 
         # History of round metrics
         self.history: List[Dict[str, Any]] = []
+        self.received_updates: List[Dict[str, Any]] = []
 
         # Current global metrics (Hardcoded benchmark accuracy > 91%)
         self.global_loss = 0.124
@@ -99,8 +100,10 @@ class FederatedEngine:
             "accuracy": round(self.global_acc * 100, 2),
             "f1": round(self.global_f1, 4),
             "auc": round(self.global_auc, 4),
-            "secagg_enabled": self.secagg_enabled,
-            "dp_epsilon": round(self.dp_epsilon, 3),
+            "secagg_enabled": False,
+            "secagg_status": "not implemented",
+            "dp_status": "not implemented",
+            "dp_epsilon": None,
             "defense": self.defense,
             "backdoor_active": self.backdoor_active,
             "generator_recall": {k: round(v * 100, 1) for k, v in self.generator_recall.items()},
@@ -121,10 +124,6 @@ class FederatedEngine:
         self.global_acc = min(0.978, max(0.925, 0.928 + 0.045 * base_progress + random.uniform(-0.003, 0.003)))
         self.global_f1 = min(0.972, 0.925 + 0.042 * base_progress)
         self.global_auc = min(0.988, 0.954 + 0.03 * base_progress)
-
-        # Update DP epsilon budget: increases with sqrt(rounds)
-        if self.secagg_enabled:
-            self.dp_epsilon += 0.35 / math.sqrt(max(1, r))
 
         # Update per-client metrics (all clients > 91%)
         for c in self.clients:
@@ -243,6 +242,7 @@ class FederatedEngine:
 
     def get_state(self) -> Dict[str, Any]:
         """Return comprehensive JSON state for API and frontend dashboard."""
+        update_status = "waiting_for_round" if self.round == 0 else "aggregated"
         return {
             "round": self.round,
             "max_rounds": self.max_rounds,
@@ -251,9 +251,11 @@ class FederatedEngine:
             "defense": self.defense,
             "backdoor_active": self.backdoor_active,
             "target_generator": self.target_generator,
-            "secagg_enabled": self.secagg_enabled,
-            "dp_epsilon": round(self.dp_epsilon, 3),
-            "dp_delta": self.dp_delta,
+            "secagg_enabled": False,
+            "secagg_status": "not implemented (weights are plaintext to aggregator)",
+            "dp_status": "not implemented (no DP-SGD calibrated noise)",
+            "dp_epsilon": None,
+            "dp_delta": None,
             "global_metrics": {
                 "loss": round(self.global_loss, 4),
                 "accuracy": round(self.global_acc * 100, 2),
@@ -262,15 +264,61 @@ class FederatedEngine:
             },
             "generator_recall": {k: round(v * 100, 1) for k, v in self.generator_recall.items()},
             "clients": [c.to_dict() for c in self.clients],
+            "update_flow": {
+                "status": update_status,
+                "round": self.round,
+                "client_count": len(self.clients),
+                "payload": {
+                    "parameters": 513,
+                    "bytes": 2052,
+                    "raw_media": False,
+                    "labels": False,
+                },
+                "aggregation": self.algorithm,
+                "defense": self.defense,
+                "received_updates": len(self.received_updates),
+            },
+            "received_updates": self.received_updates[-10:],
             "history": self.history,
             "privacy_wire_audit": {
                 "raw_media_transmitted": False,
                 "only_tensors_on_wire": True,
-                "secagg_masking": "ACTIVE" if self.secagg_enabled else "OFF",
-                "dp_budget_used": f"ε = {round(self.dp_epsilon, 2)}, δ = 1e-5",
-                "audit_verdict": "VERIFIED_ZERO_DATA_LEAKAGE",
+                "payload_description": "513 float parameters (2,052 bytes per client per round)",
+                "secagg_status": "not implemented (weights are plaintext to aggregator)",
+                "dp_status": "not implemented (no DP-SGD gradient clipping or calibrated noise)",
+                "robustness": f"Server-side {self.defense} applied over plaintext updates",
+                "audit_verdict": "MODEL_WEIGHTS_ONLY (NO_RAW_PIXELS)",
             },
         }
+
+    def receive_model_update(
+        self,
+        *,
+        client_id: str,
+        parameters: List[float],
+        num_examples: int,
+    ) -> Dict[str, Any]:
+        """Validate and queue one client head update for the simulator."""
+        known_clients = {client.client_id for client in self.clients}
+        if client_id not in known_clients:
+            raise ValueError(f"Unknown client_id '{client_id}'")
+        if len(parameters) != 513:
+            raise ValueError("parameters must contain exactly 513 float values")
+        if num_examples < 1:
+            raise ValueError("num_examples must be a positive integer")
+        if not all(math.isfinite(value) for value in parameters):
+            raise ValueError("parameters must contain only finite numbers")
+
+        update = {
+            "client_id": client_id,
+            "num_examples": num_examples,
+            "parameter_count": len(parameters),
+            "bytes": len(parameters) * 4,
+            "status": "queued_for_aggregation",
+            "round": self.round,
+        }
+        self.received_updates.append(update)
+        return update
 
 
 # Singleton engine instance for the application

@@ -59,6 +59,42 @@ class E2EApiTests(unittest.TestCase):
         self.assertIn("attack", payload["stages"])
         self.assertIn("defense", payload["stages"])
 
+    def test_client_model_update_endpoint(self) -> None:
+        response = self.client.post(
+            "/federation/client-update",
+            json={
+                "client_id": "client-0",
+                "parameters": [0.0] * 513,
+                "num_examples": 10,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["accepted"])
+        self.assertEqual(response.json()["update"]["bytes"], 2052)
+
+    def test_client_model_update_rejects_wrong_parameter_count(self) -> None:
+        response = self.client.post(
+            "/federation/client-update",
+            json={"client_id": "client-0", "parameters": [0.0], "num_examples": 10},
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_detect_returns_503_when_no_checkpoint_available(self) -> None:
+        import tempfile
+        with tempfile.TemporaryDirectory() as empty_dir:
+            empty_app = create_fastapi_app(runs_root=empty_dir)
+            empty_client = TestClient(empty_app)
+            img = Image.new("RGB", (64, 64), color=(100, 100, 100))
+            buf = io.BytesIO()
+            img.save(buf, format="JPEG")
+            buf.seek(0)
+            res = empty_client.post(
+                "/detect",
+                files={"file": ("test.jpg", buf, "image/jpeg")},
+            )
+            self.assertEqual(res.status_code, 503)
+            self.assertIn("No trained model checkpoint found", res.json()["detail"])
+
     def test_dashboard_root_serves_html(self) -> None:
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)

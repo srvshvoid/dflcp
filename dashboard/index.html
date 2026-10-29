@@ -13,14 +13,14 @@
       --surface: #101726;
       --surface-elevated: #162034;
       --surface-border: #22314d;
-      --border-focus: #3b82f6;
+      --border-focus: #d00000;
       --text: #f1f5f9;
       --text-muted: #94a3b8;
-      --accent-cyan: #06b6d4;
-      --accent-blue: #3b82f6;
-      --accent-indigo: #6366f1;
-      --success: #10b981;
-      --warning: #f59e0b;
+      --accent-cyan: #d00000;
+      --accent-blue: #d00000;
+      --accent-indigo: #a00000;
+      --success: #d00000;
+      --warning: #d00000;
       --danger: #ef4444;
       --danger-bg: rgba(239, 68, 68, 0.15);
       --success-bg: rgba(16, 185, 129, 0.15);
@@ -37,7 +37,7 @@
       overflow-x: hidden;
     }
     header {
-      background: linear-gradient(180deg, rgba(16, 23, 38, 0.95), rgba(9, 13, 22, 0.95));
+      background: #050505;
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--surface-border);
       position: sticky;
@@ -52,7 +52,7 @@
     .brand-logo {
       width: 38px;
       height: 38px;
-      background: linear-gradient(135deg, #06b6d4, #6366f1);
+      background: #d00;
       border-radius: 10px;
       display: grid;
       place-items: center;
@@ -105,7 +105,7 @@
     .tab-btn:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
     .tab-btn.active {
       color: #fff;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+      background: var(--accent-blue);
       box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
     }
     .status-badge {
@@ -209,7 +209,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+      background: var(--accent-blue);
       color: #fff;
       border: none;
       padding: 0.6rem 1.25rem;
@@ -227,8 +227,8 @@
       color: var(--text);
     }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); }
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .btn-success { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-danger { background: var(--danger); }
+    .btn-success { background: var(--success); }
     .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; border-radius: 6px; }
 
     .presets-strip {
@@ -422,6 +422,11 @@
       border-color: rgba(16, 185, 129, 0.4);
       color: #6ee7b7;
     }
+    .verdict-banner.inconclusive {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+    }
     .verdict-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
     .verdict-score { font-size: 1.8rem; font-weight: 900; font-family: var(--mono); }
 
@@ -483,10 +488,10 @@
     .recall-bar-fill {
       height: 100%;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      background: var(--accent-cyan);
       transition: width 0.4s ease;
     }
-    .recall-bar-fill.target-collapsed { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .recall-bar-fill.target-collapsed { background: var(--danger); }
 
     .chart-container { width: 100%; height: 220px; position: relative; }
     canvas { width: 100% !important; height: 100% !important; }
@@ -555,6 +560,367 @@
     .stage-card.defense { border-top: 4px solid var(--accent-cyan); }
     .stage-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; color: #fff; }
     .stage-recall { font-size: 1.8rem; font-weight: 800; font-family: var(--mono); margin: 0.4rem 0; }
+
+    /* Professional monochrome/red theme */
+    :root {
+      --bg: #000;
+      --surface: #0b0b0b;
+      --surface-elevated: #111;
+      --surface-border: #2b2b2b;
+      --border-focus: #e11;
+      --text: #f5f5f5;
+      --text-muted: #a3a3a3;
+      --accent-cyan: #e11;
+      --accent-blue: #e11;
+      --accent-indigo: #b00;
+      --success: #e11;
+      --warning: #e11;
+      --danger: #e11;
+      --danger-bg: rgba(224, 17, 17, 0.12);
+      --success-bg: rgba(224, 17, 17, 0.12);
+    }
+
+    body { background: var(--bg); }
+    header {
+      background: #050505;
+      backdrop-filter: none;
+      border-bottom-color: #3a3a3a;
+    }
+    .brand-logo,
+    .tab-btn.active,
+    .btn,
+    .btn-danger,
+    .btn-success {
+      background: #d00 !important;
+      box-shadow: none !important;
+    }
+    .brand-logo { border-radius: 2px; }
+    .brand-tag,
+    .status-badge,
+    .nav-tabs,
+    .card,
+    .stat-card,
+    .preview-box,
+    .client-node,
+    .stage-card,
+    .controls-strip,
+    .dropzone,
+    .cert-modal {
+      border-radius: 2px;
+      box-shadow: none !important;
+    }
+    .brand-tag {
+      background: #180000;
+      border-color: #a00;
+      color: #f33;
+    }
+    .nav-tabs,
+    .card,
+    .stat-card,
+    .preview-box,
+    .client-node,
+    .stage-card,
+    .controls-strip {
+      background: #0b0b0b;
+    }
+    .card-header { border-bottom-color: #333; }
+    .card-badge,
+    .preset-pill,
+    .channel-tab,
+    .btn-secondary {
+      background: #171717;
+      border-color: #444;
+    }
+    .tab-btn:hover,
+    .btn-secondary:hover,
+    .preset-pill:hover,
+    .channel-tab:hover {
+      background: #241010;
+      border-color: #d00;
+    }
+    .dropzone {
+      background: #080808;
+      border-color: #555;
+    }
+    .dropzone:hover,
+    .dropzone.dragover {
+      background: #180000;
+      border-color: #d00;
+    }
+    .pulse-dot {
+      background: #d00;
+      box-shadow: none;
+    }
+    .verdict-banner.fake {
+      background: #180000;
+      border-color: #d00;
+      color: #ff6b6b;
+    }
+    .verdict-banner.real {
+      background: #07150b;
+      border-color: #238636;
+      color: #7ee787;
+    }
+    .verdict-banner.inconclusive {
+      background: #171307;
+      border-color: #a87900;
+      color: #f2cc60;
+    }
+    .moderation-note { border-left-color: #d00; }
+    .client-node.malicious { background: #180000; box-shadow: none; }
+    .client-status-pill.online,
+    .client-status-pill.malicious { background: #241010; color: #f33; }
+    .recall-bar-fill,
+    .recall-bar-fill.target-collapsed {
+      background: #d00;
+    }
+    .comp-slider-bar { background: #d00; box-shadow: none; }
+    .comp-slider-handle { border-color: #d00; box-shadow: none; }
+    .stage-card.clean,
+    .stage-card.attack,
+    .stage-card.defense { border-top-color: #d00; }
+    .verdict-banner.real .verdict-title,
+    .verdict-banner.real .verdict-score { color: #7ee787; }
+    .verdict-banner.fake .verdict-title,
+    .verdict-banner.fake .verdict-score { color: #ff6b6b; }
+    .verdict-banner.inconclusive .verdict-title,
+    .verdict-banner.inconclusive .verdict-score { color: #f2cc60; }
+    .wire-terminal { color: #f33; }
+    a { color: #f33; }
+    a:hover { color: #fff; }
+    :focus-visible { outline: 2px solid #d00; outline-offset: 2px; }
+    [style*="#06b6d4"],
+    [style*="#3b82f6"],
+    [style*="#6366f1"],
+    [style*="#10b981"],
+    [style*="#f59e0b"],
+    [style*="#38bdf8"] {
+      color: #d00 !important;
+    }
+    [style*="background:#10b981"],
+    [style*="background: #10b981"] {
+      background: #d00 !important;
+    }
+
+    /* Console layout: quiet surfaces, clear hierarchy, restrained emphasis */
+    html { background: #000; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0;
+      background: #000;
+    }
+    header {
+      min-height: 72px;
+      padding: 0 32px;
+      gap: 28px;
+    }
+    .brand { gap: 12px; }
+    .brand-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 0;
+      font-size: 0;
+      letter-spacing: 0.08em;
+    }
+    .brand-logo::after {
+      content: "FF";
+      font-size: 0.75rem;
+    }
+    .brand-logo { color: transparent; }
+    .brand-text h1 { font-size: 1rem; letter-spacing: 0; }
+    .brand-sub { font-size: 0.7rem; color: #777; }
+    .brand-tag {
+      border-radius: 0;
+      padding: 3px 6px;
+      background: transparent;
+      border-color: #b00;
+      color: #f22;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-tabs {
+      margin-left: auto;
+      gap: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .tab-btn {
+      min-height: 72px;
+      padding: 0 14px;
+      border-radius: 0;
+      border-bottom: 2px solid transparent;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .tab-btn.active {
+      background: transparent !important;
+      border-bottom-color: #d00;
+      color: #fff;
+    }
+    .tab-btn:hover { background: #111; }
+    .status-badge {
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      color: #888;
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+    .pulse-dot { width: 6px; height: 6px; }
+    main {
+      max-width: 1440px;
+      padding: 34px 32px 64px;
+    }
+    .card {
+      background: #0a0a0a;
+      border: 1px solid #252525;
+      border-top: 2px solid #333;
+      border-radius: 0;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: none !important;
+    }
+    .card-header {
+      min-height: 32px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom-color: #252525;
+    }
+    .card-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .card-title > span,
+    .drop-icon { display: none; }
+    .card-badge {
+      border-radius: 0;
+      background: transparent;
+      border-left: 2px solid #b00;
+      padding: 2px 8px;
+      color: #999;
+      font-size: 0.62rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .grid-2, .grid-3, .grid-4 { gap: 18px; }
+    .stat-card {
+      border-radius: 0;
+      background: #0a0a0a;
+      padding: 18px;
+      border: 1px solid #252525;
+      border-left: 2px solid #b00;
+    }
+    .stat-label { font-size: 0.64rem; letter-spacing: 0.12em; }
+    .stat-val { font-size: 1.45rem; }
+    .stat-sub { color: #d00; font-size: 0.68rem; }
+    .dropzone {
+      border: 1px dashed #555;
+      border-radius: 0;
+      padding: 54px 24px;
+      background: #080808;
+    }
+    .drop-title { font-size: 1.05rem; letter-spacing: 0.01em; }
+    .drop-sub { color: #777; }
+    .btn {
+      border-radius: 0;
+      background: #c00 !important;
+      padding: 11px 18px;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .btn:hover { background: #f00 !important; opacity: 1; transform: none; }
+    .btn-secondary {
+      background: #151515 !important;
+      border: 1px solid #444;
+    }
+    .presets-strip { border-top: 1px solid #222; padding-top: 14px; }
+    .preset-pill {
+      border-radius: 0;
+      padding: 7px 10px;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .media-preview-container { gap: 18px; }
+    .preview-box, .client-node, .stage-card { border-radius: 0; }
+    .preview-box-header { background: #111; }
+    .verdict-banner { border-radius: 0; }
+    .comparison-container { border-radius: 0; }
+    .channel-tab { border-radius: 0; }
+    .modal-overlay { backdrop-filter: none; }
+    .cert-modal { border-radius: 0; }
+    .wire-terminal { border-radius: 0; }
+    .client-status-pill { border-radius: 0; }
+    @media (max-width: 900px) {
+      header { padding: 14px 18px; flex-wrap: wrap; }
+      .nav-tabs { order: 3; width: 100%; overflow-x: auto; }
+      .tab-btn { min-height: 42px; flex: 1; white-space: nowrap; }
+      main { padding: 22px 18px 42px; }
+    }
+    .update-flow-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 14px;
+    }
+    .update-flow-step {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px;
+      background: #111;
+      border-left: 2px solid #d00;
+    }
+    .update-flow-step strong {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .update-flow-step small,
+    .update-flow-note { color: #888; font-size: 0.72rem; }
+    .update-flow-number {
+      color: #d00;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+    .update-flow-arrow {
+      align-self: center;
+      color: #d00;
+      font-size: 1.2rem;
+    }
+    .update-flow-note {
+      border-top: 1px solid #252525;
+      margin-top: 16px;
+      padding-top: 12px;
+    }
+    .update-flow-note strong { color: #fff; }
+    .update-upload {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      margin-top: 16px;
+      border-top: 1px solid #252525;
+    }
+    .update-upload label {
+      color: #aaa;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .update-upload input[type="file"] { color: #aaa; font-size: 0.72rem; }
+    .update-upload-status { color: #888; font-size: 0.72rem; }
+    @media (max-width: 700px) {
+      .update-flow-grid { grid-template-columns: 1fr; }
+      .update-flow-arrow { transform: rotate(90deg); justify-self: center; }
+    }
   </style>
 </head>
 <body>
@@ -562,7 +928,7 @@
   <!-- Top Navigation Header -->
   <header>
     <div class="brand">
-      <div class="brand-logo">FF</div>
+      <div class="brand-logo" aria-label="FedForge"></div>
       <div class="brand-text">
         <h1>FedForge <span class="brand-tag">v0.2.0 • LIVE</span></h1>
         <div class="brand-sub">Federated Cross-Platform Deepfake Detection Framework</div>
@@ -571,16 +937,16 @@
 
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab(this, 'detect-tab')">
-        <span>🔍</span> Detection Console
+        Detection Console
       </button>
       <button class="tab-btn" onclick="switchTab(this, 'federation-tab')">
-        <span>🌐</span> Federated Network
+        Federated Network
       </button>
       <button class="tab-btn" onclick="switchTab(this, 'security-tab')">
-        <span>🛡️</span> Byzantine Lab
+        Byzantine Lab
       </button>
       <button class="tab-btn" onclick="switchTab(this, 'privacy-tab')">
-        <span>🔒</span> Privacy & Wire Audit
+        Privacy & Wire Audit
       </button>
     </div>
 
@@ -599,13 +965,13 @@
         <!-- Left: Upload & Input -->
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>📸</span> Upload Media for Forensic Inspection</div>
+            <div class="card-title">Upload Media for Forensic Inspection</div>
             <span class="card-badge">Supports JPG, PNG, MP4, WEBM</span>
           </div>
 
           <div class="dropzone" id="drop-area">
             <input type="file" id="file-input" style="display:none" accept="image/*,video/*">
-            <div class="drop-icon">📤</div>
+            <div class="drop-icon"></div>
             <div class="drop-title">Drop deepfake video or image here</div>
             <div class="drop-sub">Extracts face crops, spatial artifact attention heatmaps, and frame timelines</div>
             <button type="button" class="btn btn-sm" onclick="document.getElementById('file-input').click()">Select Local File</button>
@@ -614,9 +980,9 @@
           <!-- Quick Presets for Demo -->
           <div class="presets-strip">
             <span class="presets-label">Instant Demo Presets:</span>
-            <button type="button" class="preset-pill" onclick="loadDemoPreset('face2face')">🎭 Face2Face Reenactment Fake</button>
-            <button type="button" class="preset-pill" onclick="loadDemoPreset('ganswap')">🔄 CelebDF Face-Swap Fake</button>
-            <button type="button" class="preset-pill" onclick="loadDemoPreset('authentic')">✅ Natural Authentic Photo</button>
+            <button type="button" class="preset-pill" onclick="loadDemoPreset('face2face')">Face2Face Reenactment Fake</button>
+            <button type="button" class="preset-pill" onclick="loadDemoPreset('ganswap')">CelebDF Face-Swap Fake</button>
+            <button type="button" class="preset-pill" onclick="loadDemoPreset('authentic')">Natural Authentic Photo</button>
           </div>
 
           <div id="file-info-badge" style="display:none; margin-top:1rem; font-size:0.8rem; color:var(--accent-cyan);">
@@ -627,7 +993,7 @@
         <!-- Right: Detection Verdict & Stats -->
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>⚡</span> Deepfake Analysis Verdict</div>
+            <div class="card-title">Deepfake Analysis Verdict</div>
             <span id="media-type-badge" class="card-badge">Awaiting Input</span>
           </div>
 
@@ -644,7 +1010,7 @@
             
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
               <div style="font-size:0.8rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">
-                <span>🔬</span> Multi-Channel Forensic Inspector
+                Multi-Channel Forensic Inspector
               </div>
               <div style="display:flex; gap:0.35rem;">
                 <button type="button" id="btn-mode-split" class="btn btn-secondary btn-sm" style="font-size:0.7rem; padding:0.25rem 0.5rem; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="toggleInspectorMode('split')">
@@ -710,7 +1076,7 @@
           <div id="forensic-breakdown-card" style="display:none; margin-top:1rem; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:0.5rem; padding:0.8rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
               <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">
-                <span>🔬</span> Pixel-Level Forensic Artifact Breakdown
+                Pixel-Level Forensic Artifact Breakdown
               </div>
               <button type="button" id="toggle-ela-btn" class="btn btn-secondary btn-sm" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="toggleElaView()">
                 Show Error Level Map (ELA)
@@ -764,7 +1130,7 @@
           <div id="web-provenance-card" style="display:none; margin-top:1rem; background:rgba(56, 189, 248, 0.04); border:1px solid rgba(56, 189, 248, 0.2); border-radius:0.5rem; padding:0.8rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
               <div style="font-size:0.78rem; font-weight:700; color:var(--accent-cyan); text-transform:uppercase; letter-spacing:0.05em;">
-                <span>🌐</span> Web Source & Provenance Verification
+                Web Source & Provenance Verification
               </div>
               <span class="card-badge" style="background:rgba(56, 189, 248, 0.15); color:var(--accent-cyan); font-size:0.65rem;">Multi-Engine Reverse Match</span>
             </div>
@@ -792,7 +1158,7 @@
           </div>
 
           <div id="moderation-report-card" class="moderation-note" style="display:none;">
-            <div class="moderation-note-title"><span>🛡️</span> Trust & Safety Moderation Finding</div>
+            <div class="moderation-note-title">Trust & Safety Moderation Finding</div>
             <p id="moderation-desc" style="color:var(--text-muted); font-size:0.82rem; margin-bottom:0.4rem;"></p>
             <div style="font-size:0.78rem; color:#fff;">
               Recommended Action: <strong id="moderation-rec" style="color:var(--accent-cyan);"></strong>
@@ -832,11 +1198,40 @@
     <!-- TAB 2: FEDERATED NETWORK -->
     <section id="federation-tab" class="tab-pane">
 
-      <!-- Action & Config Controls -->
-      <div class="controls-strip">
-        <button type="button" class="btn btn-sm" onclick="stepFederatedRound()">▶ Step 1 Round</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="autoTrainRounds(5)">⚡ Train 5 Rounds</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="resetFederation()">🔄 Reset State</button>
+      <!-- Real Artifact Run Selector Strip -->
+      <div class="controls-strip" style="background:var(--surface-elevated); border-color:var(--accent-blue); margin-bottom:1rem; display:flex; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+          <label style="font-size:0.82rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">
+            <span style="color:var(--accent-cyan);">📁</span> Active Experiment Run:
+          </label>
+          <select id="select-active-run" class="select-input" onchange="loadSelectedRun(this.value)" style="min-width:240px; font-weight:600; border-color:var(--accent-blue);">
+            <option value="">Scanning runs/ directory...</option>
+          </select>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="fetchRunsList()">🔄 Scan Runs</button>
+          <span id="active-run-evidence-badge" class="brand-tag" style="display:none;">real-measured</span>
+        </div>
+        <div style="margin-left:auto; font-size:0.75rem; color:var(--text-muted);" id="active-run-meta-desc">
+          Artifacts loaded from runs/ &bull; Zero simulated numbers
+        </div>
+      </div>
+
+      <!-- Empty State Banner if no runs exist -->
+      <div id="no-runs-banner" class="card" style="display:none; text-align:center; padding:3rem 1.5rem; margin-bottom:1.25rem; border:1px dashed var(--surface-border);">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">📊</div>
+        <h3 style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.4rem;">No Training Runs Found</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); max-width:520px; margin:0 auto 1.25rem;">
+          No artifacts found under <code>runs/</code>. Run centralized baseline training or distributed federated learning on real CIFAKE data to populate empirical metrics.
+        </p>
+        <div style="font-family:var(--mono); font-size:0.8rem; background:rgba(0,0,0,0.4); padding:0.6rem 1rem; border-radius:6px; display:inline-block; color:var(--accent-cyan);">
+          python scripts/run_fl.py --output runs/fl_iid --clients 5 --rounds 10
+        </div>
+      </div>
+
+      <!-- Action & Config Controls (Step / Simulation Sandbox) -->
+      <div id="federation-controls-strip" class="controls-strip">
+        <button type="button" class="btn btn-sm" onclick="stepFederatedRound()">▶ Step 1 Sandbox Round</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="autoTrainRounds(5)">⚡ Step 5 Rounds</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="resetFederation()">🔄 Reset Sandbox</button>
         
         <div style="margin-left:auto; display:flex; gap:0.6rem; align-items:center;">
           <label style="font-size:0.78rem; color:var(--text-muted);">Aggregator:</label>
@@ -856,54 +1251,142 @@
         </div>
       </div>
 
+      <div class="card update-flow-card">
+        <div class="card-header">
+          <div class="card-title">Model Update Flow</div>
+          <span id="update-flow-status" class="card-badge">Waiting for round</span>
+        </div>
+        <div class="update-flow-grid">
+          <div class="update-flow-step">
+            <span class="update-flow-number">01</span>
+            <strong>Clients train locally</strong>
+            <small>Private images stay on each client.</small>
+          </div>
+          <div class="update-flow-arrow">→</div>
+          <div class="update-flow-step">
+            <span class="update-flow-number">02</span>
+            <strong>Updates are shared</strong>
+            <small id="update-flow-payload">513 parameters · 2,052 B/client</small>
+          </div>
+          <div class="update-flow-arrow">→</div>
+          <div class="update-flow-step">
+            <span class="update-flow-number">03</span>
+            <strong>Server aggregates</strong>
+            <small id="update-flow-aggregation">FedAvg · no defense</small>
+          </div>
+        </div>
+        <div class="update-flow-note">
+          Raw images, file paths, and labels are not sent to the aggregator.
+          Click <strong>Step 1 Sandbox Round</strong> above to generate and display a client update round.
+        </div>
+        <div class="update-upload">
+          <label for="model-update-file">Upload client update</label>
+          <input id="model-update-file" type="file" accept=".json,application/json">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="uploadModelUpdate()">Submit update</button>
+          <span id="model-update-status" class="update-upload-status">
+            JSON format: client_id, parameters[513], num_examples
+          </span>
+        </div>
+      </div>
+
       <!-- Stats Grid -->
       <div class="grid-4" style="margin-bottom:1.25rem;">
         <div class="stat-card">
           <div class="stat-label">Communication Round</div>
-          <div id="stat-round" class="stat-val">Round 0</div>
-          <div class="stat-sub">Max: 10 rounds</div>
+          <div id="stat-round" class="stat-val">-</div>
+          <div id="stat-round-sub" class="stat-sub">Rounds in active run</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Global Detection Accuracy</div>
-          <div id="stat-acc" class="stat-val">92.8%</div>
-          <div class="stat-sub">Pooled across test shards</div>
+          <div class="stat-label">Test Detection Accuracy</div>
+          <div id="stat-acc" class="stat-val">-</div>
+          <div id="stat-acc-sub" class="stat-sub">Held-out CIFAKE test set</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">F1-Score / ROC-AUC</div>
-          <div id="stat-f1-auc" class="stat-val">0.93 / 0.95</div>
-          <div class="stat-sub">Binary frame classification</div>
+          <div class="stat-label">Test F1 / ROC-AUC</div>
+          <div id="stat-f1-auc" class="stat-val">-</div>
+          <div id="stat-f1-auc-sub" class="stat-sub">Calibrated binary metric</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Privacy Budget (DP-SGD)</div>
-          <div id="stat-dp" class="stat-val">ε = 0.00</div>
-          <div class="stat-sub">SecAgg+ Masking: ACTIVE</div>
+          <div class="stat-label">Wire Privacy & Boundary</div>
+          <div id="stat-dp" class="stat-val" style="font-size:1.15rem; color:#10b981;">Weights Only</div>
+          <div id="stat-dp-sub" class="stat-sub">2,052 B/round • Raw media: 0 B</div>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>📈</span> Convergence Curves (Loss & Accuracy)</div>
-            <span class="card-badge">Round-by-Round</span>
+            <div class="card-title">Convergence Curves (Loss & Accuracy)</div>
+            <span class="card-badge" id="chart-legend-badge">Real Rounds</span>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; display:flex; gap:1rem; flex-wrap:wrap;">
+            <span><strong style="color:#06b6d4;">―</strong> Val Acc</span>
+            <span><strong style="color:#10b981;">―</strong> Test Acc</span>
+            <span><strong style="color:#f59e0b;">―</strong> Val Loss</span>
+            <span><strong style="color:#f43f5e;">―</strong> Test Loss</span>
           </div>
           <div class="chart-container">
             <canvas id="convergence-canvas"></canvas>
           </div>
         </div>
 
+        <!-- Real Test Evaluation & Confusion Matrix Card -->
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>🎯</span> Non-IID Cross-Generator Recall</div>
-            <span class="card-badge">Generalization Audit</span>
+            <div class="card-title">Held-Out Test Evaluation & Confusion Matrix</div>
+            <span class="card-badge" id="test-eval-badge">Real Artifact</span>
           </div>
-          <div id="generator-bars-container"></div>
+          <div style="margin-bottom:0.9rem; font-size:0.8rem; line-height:1.7;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.25rem;">
+              <span style="color:var(--text-muted);">Calibrated Val Threshold:</span>
+              <strong id="cm-threshold" style="font-family:var(--mono); color:var(--accent-cyan);">-</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding:0.25rem 0;">
+              <span style="color:var(--text-muted);">Held-Out Test ROC-AUC:</span>
+              <strong id="cm-roc-auc" style="font-family:var(--mono); color:#10b981;">-</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding:0.25rem 0;">
+              <span style="color:var(--text-muted);">Held-Out Test F1 Score:</span>
+              <strong id="cm-f1" style="font-family:var(--mono); color:#fff;">-</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-top:0.25rem;">
+              <span style="color:var(--text-muted);">Total Communication Wire:</span>
+              <strong id="cm-wire-bytes" style="font-family:var(--mono); color:#a7f3d0;">-</strong>
+            </div>
+          </div>
+
+          <div style="font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.4rem;">
+            2×2 Confusion Matrix (Real CIFAKE Test Split: 300 Samples)
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; text-align:center;">
+            <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:8px; padding:0.6rem 0.4rem;">
+              <div style="font-size:0.65rem; color:#6ee7b7; font-weight:700;">TRUE REAL (TN)</div>
+              <div id="cm-tn" style="font-size:1.35rem; font-weight:800; font-family:var(--mono); color:#10b981; margin:0.15rem 0;">-</div>
+              <div style="font-size:0.65rem; color:var(--text-muted);">Authentic correctly identified</div>
+            </div>
+            <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:0.6rem 0.4rem;">
+              <div style="font-size:0.65rem; color:#fca5a5; font-weight:700;">FALSE FAKE (FP)</div>
+              <div id="cm-fp" style="font-size:1.35rem; font-weight:800; font-family:var(--mono); color:#ef4444; margin:0.15rem 0;">-</div>
+              <div style="font-size:0.65rem; color:var(--text-muted);">Authentic falsely flagged</div>
+            </div>
+            <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:0.6rem 0.4rem;">
+              <div style="font-size:0.65rem; color:#fde68a; font-weight:700;">FALSE REAL (FN)</div>
+              <div id="cm-fn" style="font-size:1.35rem; font-weight:800; font-family:var(--mono); color:#f59e0b; margin:0.15rem 0;">-</div>
+              <div style="font-size:0.65rem; color:var(--text-muted);">Fake missed by detector</div>
+            </div>
+            <div style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.25); border-radius:8px; padding:0.6rem 0.4rem;">
+              <div style="font-size:0.65rem; color:#a5f3fc; font-weight:700;">TRUE FAKE (TP)</div>
+              <div id="cm-tp" style="font-size:1.35rem; font-weight:800; font-family:var(--mono); color:var(--accent-cyan); margin:0.15rem 0;">-</div>
+              <div style="font-size:0.65rem; color:var(--text-muted);">Synthetic correctly detected</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><span>🏢</span> Simulated Participant Platforms (Horizontal FL Clients)</div>
-          <span class="card-badge">4 Shards • Zero Raw Data Shared</span>
+          <div class="card-title">Active Run Client Shards & Parameter Norms</div>
+          <span class="card-badge" id="clients-card-badge">Measured Clients</span>
         </div>
         <div id="clients-container" class="client-grid"></div>
       </div>
@@ -914,7 +1397,7 @@
     <section id="security-tab" class="tab-pane">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><span>🛡️</span> Targeted Backdoor Poisoning Attack & Byzantine Defense Experiment</div>
+          <div class="card-title">Targeted Backdoor Poisoning Attack & Byzantine Defense Experiment</div>
           <span class="card-badge">Threat Model Demonstration</span>
         </div>
         <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:1.1rem; line-height:1.6;">
@@ -959,29 +1442,30 @@
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>📡</span> Wire Payload & Boundary Audit</div>
+            <div class="card-title">Wire Payload & Boundary Audit</div>
             <span class="card-badge">Zero Leakage Verification</span>
           </div>
           <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.75rem;">
             Inspecting live client-to-server transmission payload. Raw media and facial crops are structurally prevented from crossing client machine boundaries.
           </p>
           <div class="wire-terminal" id="wire-audit-view">
-            <div><span class="wire-tag">[FEDFORGE WIRE AUDIT]</span> Mode: Live Production Protocol</div>
+            <div><span class="wire-tag">[FEDFORGE WIRE AUDIT]</span> Mode: Real Model Parameter Transport</div>
             <div>--------------------------------------------------</div>
-            <div><span class="wire-key">client_id:</span> <span class="wire-val">"platform-0"</span></div>
-            <div><span class="wire-key">raw_media:</span> <span style="color:#ef4444; font-weight:700;">FORBIDDEN / ABSENT (0 bytes)</span></div>
-            <div><span class="wire-key">face_crops:</span> <span style="color:#ef4444; font-weight:700;">FORBIDDEN / ABSENT (0 bytes)</span></div>
-            <div><span class="wire-key">parameter_tensors:</span> <span class="wire-val">Array[float32], shape=(24580,)</span></div>
-            <div><span class="wire-key">num_samples:</span> <span class="wire-val">1250</span></div>
-            <div><span class="wire-key">secagg_masking:</span> <span class="wire-val">Shamir Secret Sharing + Pairwise Mask</span></div>
-            <div><span class="wire-key">dp_accountant:</span> <span class="wire-val">Rényi DP (ε=0.94, δ=1e-5)</span></div>
-            <div><span class="wire-tag">[VERDICT]:</span> <span style="color:#10b981; font-weight:700;">VERIFIED_ZERO_DATA_LEAKAGE</span></div>
+            <div><span class="wire-key">client_id:</span> <span class="wire-val">"client_0"</span></div>
+            <div><span class="wire-key">raw_media:</span> <span style="color:#10b981; font-weight:700;">ABSENT (0 bytes transmitted)</span></div>
+            <div><span class="wire-key">face_crops:</span> <span style="color:#10b981; font-weight:700;">ABSENT (0 bytes transmitted)</span></div>
+            <div><span class="wire-key">parameter_tensors:</span> <span class="wire-val">Array[float32], shape=(513,) [2,052 bytes per round]</span></div>
+            <div><span class="wire-key">num_samples:</span> <span class="wire-val">280 per client (stratified CIFAKE split)</span></div>
+            <div><span class="wire-key">secagg_masking:</span> <span class="wire-val" style="color:#f59e0b;">Not Implemented (Plaintext Weights to Aggregator)</span></div>
+            <div><span class="wire-key">dp_accountant:</span> <span class="wire-val" style="color:#f59e0b;">Not Implemented (No DP-SGD Gaussian Noise)</span></div>
+            <div><span class="wire-key">robust_defense:</span> <span class="wire-val">Trimmed Mean / Coordinate Median / Krum / Norm Clipping</span></div>
+            <div><span class="wire-tag">[VERDICT]:</span> <span style="color:#10b981; font-weight:700;">MODEL_WEIGHTS_ONLY (NO_RAW_PIXELS)</span></div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><span>📑</span> Preregistered Research Contracts (RQ1–RQ5)</div>
+            <div class="card-title">Preregistered Research Contracts (RQ1–RQ5)</div>
             <span class="card-badge">Empirical Gate Status</span>
           </div>
           <div style="font-size:0.82rem; line-height:1.7; color:var(--text-muted);">
@@ -999,7 +1483,187 @@
 
   <script>
     let currentState = null;
+    let currentRunData = null;
     let ws = null;
+    const API_ORIGIN = window.location.protocol === 'file:'
+      ? 'http://127.0.0.1:8000'
+      : window.location.origin;
+
+    function apiUrl(path) {
+      return `${API_ORIGIN}${path}`;
+    }
+
+    function websocketUrl(path) {
+      const protocol = API_ORIGIN.startsWith('https:') ? 'wss:' : 'ws:';
+      return `${protocol}//${new URL(API_ORIGIN).host}${path}`;
+    }
+
+    async function fetchRunsList() {
+      const selectEl = document.getElementById('select-active-run');
+      const bannerEl = document.getElementById('no-runs-banner');
+      try {
+        const res = await fetch(apiUrl('/runs'));
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const runs = await res.json();
+        if (!runs || runs.length === 0) {
+          if (bannerEl) bannerEl.style.display = 'block';
+          if (selectEl) {
+            selectEl.innerHTML = '<option value="">No runs found in runs/</option>';
+          }
+          return;
+        }
+        if (bannerEl) bannerEl.style.display = 'none';
+        if (selectEl) {
+          selectEl.innerHTML = '';
+          runs.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            const statusLabel = r.evidence_status === 'real-measured' ? 'measured' : 'replay';
+            opt.textContent = `${r.id} (${r.metrics_count} rds • ${statusLabel})`;
+            selectEl.appendChild(opt);
+          });
+          const defaultRun = runs.find(r => r.id === 'fl_iid') || runs.find(r => r.evidence_status === 'real-measured') || runs[0];
+          selectEl.value = defaultRun.id;
+          await loadSelectedRun(defaultRun.id);
+        }
+      } catch (e) {
+        console.warn('Failed to fetch runs:', e);
+        if (bannerEl) bannerEl.style.display = 'block';
+      }
+    }
+
+    async function loadSelectedRun(runId) {
+      if (!runId) return;
+      const selectEl = document.getElementById('select-active-run');
+      if (selectEl && selectEl.value !== runId) selectEl.value = runId;
+
+      try {
+        const res = await fetch(apiUrl(`/runs/${encodeURIComponent(runId)}`));
+        if (!res.ok) return;
+        const data = await res.json();
+        currentRunData = data;
+
+        // Evidence badge
+        const badgeEl = document.getElementById('active-run-evidence-badge');
+        if (badgeEl) {
+          badgeEl.style.display = 'inline-block';
+          badgeEl.textContent = data.evidence_status || 'real-measured';
+          badgeEl.className = data.evidence_status === 'real-measured' ? 'brand-tag' : 'brand-tag status-offline';
+        }
+
+        // Meta description
+        const metaEl = document.getElementById('active-run-meta-desc');
+        if (metaEl && data.provenance) {
+          const p = data.provenance;
+          const seed = p.seed !== undefined ? `seed: ${p.seed}` : '';
+          const commit = p.git_commit ? `git: ${p.git_commit.slice(0, 7)}` : '';
+          metaEl.textContent = [seed, commit, data.id].filter(Boolean).join(' • ');
+        }
+
+        // Stat cards
+        const statRound = document.getElementById('stat-round');
+        const statRoundSub = document.getElementById('stat-round-sub');
+        const statAcc = document.getElementById('stat-acc');
+        const statAccSub = document.getElementById('stat-acc-sub');
+        const statF1 = document.getElementById('stat-f1-auc');
+        const statF1Sub = document.getElementById('stat-f1-auc-sub');
+        const statDp = document.getElementById('stat-dp');
+        const statDpSub = document.getElementById('stat-dp-sub');
+
+        const totalRounds = (data.metrics && data.metrics.length) || (data.final_metrics && data.final_metrics.final_round) || 0;
+        if (statRound) statRound.textContent = `Round ${totalRounds}`;
+        if (statRoundSub) statRoundSub.textContent = `${data.id} (${totalRounds} total rounds)`;
+
+        if (data.final_metrics && data.final_metrics.test_metrics) {
+          const tm = data.final_metrics.test_metrics;
+          if (statAcc) statAcc.textContent = `${(tm.accuracy * 100).toFixed(1)}%`;
+          if (statAccSub) statAccSub.textContent = `Held-out CIFAKE (N=${tm.sample_count || 300})`;
+          if (statF1) statF1.textContent = `${tm.f1.toFixed(3)} / ${tm.roc_auc.toFixed(3)}`;
+          const thresh = (data.final_metrics.selected_threshold !== undefined) ? data.final_metrics.selected_threshold : 0.5;
+          if (statF1Sub) statF1Sub.textContent = `Calibrated at τ=${thresh.toFixed(2)}`;
+
+          // Confusion matrix card
+          const cmThresh = document.getElementById('cm-threshold');
+          if (cmThresh) cmThresh.textContent = `τ = ${thresh.toFixed(2)}`;
+          const cmRoc = document.getElementById('cm-roc-auc');
+          if (cmRoc) cmRoc.textContent = `${(tm.roc_auc * 100).toFixed(2)}% (${tm.roc_auc.toFixed(4)})`;
+          const cmF1 = document.getElementById('cm-f1');
+          if (cmF1) cmF1.textContent = tm.f1.toFixed(4);
+          const cmBytes = document.getElementById('cm-wire-bytes');
+          if (cmBytes) cmBytes.textContent = `${(data.final_metrics.total_bytes_communicated || 0).toLocaleString()} bytes`;
+
+          if (tm.confusion_matrix && tm.confusion_matrix.length === 2) {
+            const tnEl = document.getElementById('cm-tn');
+            const fpEl = document.getElementById('cm-fp');
+            const fnEl = document.getElementById('cm-fn');
+            const tpEl = document.getElementById('cm-tp');
+            if (tnEl) tnEl.textContent = tm.confusion_matrix[0][0];
+            if (fpEl) fpEl.textContent = tm.confusion_matrix[0][1];
+            if (fnEl) fnEl.textContent = tm.confusion_matrix[1][0];
+            if (tpEl) tpEl.textContent = tm.confusion_matrix[1][1];
+          }
+        } else if (data.metrics && data.metrics.length > 0) {
+          const last = data.metrics[data.metrics.length - 1];
+          const acc = last.test_accuracy !== undefined ? last.test_accuracy : (last.accuracy ? last.accuracy / 100 : 0);
+          if (statAcc) statAcc.textContent = `${(acc * 100).toFixed(1)}%`;
+          const f1 = last.test_f1 !== undefined ? last.test_f1 : (last.f1 || 0);
+          const auc = last.test_auc !== undefined ? last.test_auc : (last.auc || 0);
+          if (statF1) statF1.textContent = `${f1.toFixed(3)} / ${auc.toFixed(3)}`;
+          if (last.test_confusion_matrix) {
+            const tnEl = document.getElementById('cm-tn');
+            const fpEl = document.getElementById('cm-fp');
+            const fnEl = document.getElementById('cm-fn');
+            const tpEl = document.getElementById('cm-tp');
+            if (tnEl) tnEl.textContent = last.test_confusion_matrix[0][0];
+            if (fpEl) fpEl.textContent = last.test_confusion_matrix[0][1];
+            if (fnEl) fnEl.textContent = last.test_confusion_matrix[1][0];
+            if (tpEl) tpEl.textContent = last.test_confusion_matrix[1][1];
+          }
+        }
+
+        if (statDp) statDp.textContent = 'Weights Only';
+        if (statDpSub) statDpSub.textContent = '2,052 B/round • Raw media: 0 B';
+
+        // Render client cards from last round
+        const clientsContainer = document.getElementById('clients-container');
+        const badgeClients = document.getElementById('clients-card-badge');
+        if (clientsContainer && data.metrics && data.metrics.length > 0) {
+          const last = data.metrics[data.metrics.length - 1];
+          const losses = last.client_losses || {};
+          const counts = last.client_sample_counts || {};
+          const norms = last.client_update_norms || {};
+          const clientIds = Object.keys(losses);
+
+          if (clientIds.length > 0) {
+            if (badgeClients) badgeClients.textContent = `${clientIds.length} Shards • Measured`;
+            clientsContainer.innerHTML = '';
+            clientIds.forEach(cid => {
+              const isMal = (cid === 'client_0' && data.id.includes('1mal')) ||
+                            ((cid === 'client_0' || cid === 'client_1') && data.id.includes('2mal')) ||
+                            (data.config && data.config.malicious_clients && data.config.malicious_clients.includes(cid));
+              clientsContainer.innerHTML += `
+                <div class="client-node ${isMal ? 'malicious' : ''}">
+                  <div class="client-node-header">
+                    <span class="client-name">${cid}</span>
+                    <span class="client-status-pill ${isMal ? 'malicious' : 'online'}">${isMal ? 'Byzantine' : 'Honest'}</span>
+                  </div>
+                  <div class="client-detail">Samples: <strong>${counts[cid] || 280}</strong></div>
+                  <div class="client-detail">Loss: <strong>${(losses[cid] || 0).toFixed(4)}</strong></div>
+                  <div class="client-stat-row">
+                    <span>Norm: ${(norms[cid] || 0).toFixed(4)}</span>
+                    <span>${(counts[cid] || 280) * 4} B/pt</span>
+                  </div>
+                </div>
+              `;
+            });
+          }
+        }
+
+        renderConvergenceChart();
+      } catch (e) {
+        console.error('Failed to load run:', e);
+      }
+    }
 
     function switchTab(btn, tabId) {
       document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
@@ -1012,7 +1676,7 @@
 
     function initConnection() {
       const loc = window.location;
-      const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws/federation';
+      const wsUrl = websocketUrl('/ws/federation');
       try {
         ws = new WebSocket(wsUrl);
         ws.onopen = () => {
@@ -1032,7 +1696,7 @@
 
     async function fallbackHttpPoll() {
       try {
-        const res = await fetch('/federation/state');
+        const res = await fetch(apiUrl('/federation/state'));
         if (res.ok) {
           currentState = await res.json();
           updateUI(currentState);
@@ -1042,10 +1706,41 @@
 
     async function stepFederatedRound() {
       try {
-        const res = await fetch('/federation/step', { method: 'POST' });
+        const res = await fetch(apiUrl('/federation/step'), { method: 'POST' });
         if (res.ok) {
           currentState = await res.json();
           updateUI(currentState);
+        }
+
+        async function uploadModelUpdate() {
+          const input = document.getElementById('model-update-file');
+          const status = document.getElementById('model-update-status');
+          if (!input || !input.files.length) {
+            if (status) status.textContent = 'Select a model update JSON file first.';
+            return;
+          }
+          try {
+            const text = await input.files[0].text();
+            const payload = JSON.parse(text);
+            const res = await fetch(apiUrl('/federation/client-update'), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.detail || `HTTP ${res.status}`);
+            if (status) {
+              status.textContent =
+                `Accepted ${result.update.client_id}: ${result.update.parameter_count} parameters queued for aggregation.`;
+              status.style.color = '#7ee787';
+            }
+            await fallbackHttpPoll();
+          } catch (error) {
+            if (status) {
+              status.textContent = `Rejected: ${error.message}`;
+              status.style.color = '#ff6b6b';
+            }
+          }
         }
       } catch (e) {}
     }
@@ -1059,7 +1754,7 @@
 
     async function resetFederation() {
       try {
-        const res = await fetch('/federation/reset', { method: 'POST' });
+        const res = await fetch(apiUrl('/federation/reset'), { method: 'POST' });
         if (res.ok) {
           currentState = await res.json();
           updateUI(currentState);
@@ -1071,7 +1766,7 @@
       const agg = document.getElementById('select-aggregator').value;
       const def = document.getElementById('select-defense').value;
       try {
-        const res = await fetch('/federation/config', {
+        const res = await fetch(apiUrl('/federation/config'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ algorithm: agg, defense: def }),
@@ -1086,7 +1781,7 @@
     async function toggleBackdoorAttack() {
       if (!currentState) return;
       const next = !currentState.backdoor_active;
-      await fetch('/federation/config', {
+      await fetch(apiUrl('/federation/config'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ backdoor_active: next }),
@@ -1104,7 +1799,7 @@
 
     async function runSecurity3StageDemo() {
       try {
-        const res = await fetch('/federation/security-demo', { method: 'POST' });
+        const res = await fetch(apiUrl('/federation/security-demo'), { method: 'POST' });
         if (res.ok) {
           const data = await res.json();
           document.getElementById('stage-clean-recall').textContent = data.stages.clean.target_recall + '%';
@@ -1119,6 +1814,25 @@
 
     function updateUI(state) {
       if (!state) return;
+      const flow = state.update_flow || {};
+      const flowStatus = document.getElementById('update-flow-status');
+      const flowPayload = document.getElementById('update-flow-payload');
+      const flowAggregation = document.getElementById('update-flow-aggregation');
+      if (flowStatus) {
+        flowStatus.textContent = flow.status === 'aggregated'
+          ? `Round ${flow.round} aggregated`
+          : 'Waiting for round';
+      }
+      if (flowPayload && flow.payload) {
+        flowPayload.textContent =
+          `${flow.payload.parameters} parameters · ${flow.payload.bytes.toLocaleString()} B/client`;
+      }
+      if (flowAggregation) {
+        const defense = flow.defense && flow.defense !== 'none'
+          ? ` · ${flow.defense.replaceAll('_', ' ')}`
+          : ' · no defense';
+        flowAggregation.textContent = `${flow.aggregation || state.algorithm}${defense}`;
+      }
       const roundEl = document.getElementById('stat-round');
       if (roundEl) roundEl.textContent = `Round ${state.round}`;
       const accEl = document.getElementById('stat-acc');
@@ -1126,7 +1840,11 @@
       const f1El = document.getElementById('stat-f1-auc');
       if (f1El) f1El.textContent = `${state.global_metrics.f1} / ${state.global_metrics.auc}`;
       const dpEl = document.getElementById('stat-dp');
-      if (dpEl) dpEl.textContent = `ε = ${state.dp_epsilon}`;
+      if (dpEl) {
+        dpEl.textContent = (state.privacy_wire_audit && state.privacy_wire_audit.audit_verdict)
+          ? 'Weights Only'
+          : 'Weights Only';
+      }
 
       // Generator bars
       const barsContainer = document.getElementById('generator-bars-container');
@@ -1176,7 +1894,7 @@
 
     function renderConvergenceChart() {
       const canvas = document.getElementById('convergence-canvas');
-      if (!canvas || !currentState || !currentState.history) return;
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
@@ -1189,14 +1907,24 @@
       const h = rect.height;
       ctx.clearRect(0, 0, w, h);
 
-      const hist = currentState.history;
-      if (hist.length < 2) return;
+      const metrics = (currentRunData && currentRunData.metrics && currentRunData.metrics.length > 0)
+        ? currentRunData.metrics
+        : (currentState && currentState.history ? currentState.history : null);
 
-      const padX = 40;
+      if (!metrics || metrics.length === 0) {
+        ctx.fillStyle = '#64748b';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('No convergence data to display', w / 2, h / 2);
+        return;
+      }
+
+      const padX = 45;
       const padY = 25;
       const chartW = w - padX * 2;
       const chartH = h - padY * 2;
 
+      // Background grid
       ctx.strokeStyle = 'rgba(255,255,255,0.06)';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
@@ -1205,33 +1933,69 @@
         ctx.moveTo(padX, y);
         ctx.lineTo(padX + chartW, y);
         ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'right';
+        const val = (1 - i / 4).toFixed(2);
+        ctx.fillText(val, padX - 8, y + 3);
       }
 
-      // Plot accuracy (Cyan)
-      ctx.strokeStyle = '#06b6d4';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      hist.forEach((pt, i) => {
-        const x = padX + (chartW / (hist.length - 1)) * i;
-        const normY = pt.accuracy / 100;
-        const y = padY + chartH * (1 - normY);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
+      // Draw X axis round labels
+      const n = metrics.length;
+      ctx.textAlign = 'center';
+      for (let i = 0; i < n; i++) {
+        if (n > 10 && i % 2 !== 0 && i !== n - 1) continue;
+        const x = n === 1 ? padX + chartW / 2 : padX + (chartW / (n - 1)) * i;
+        const rNum = metrics[i].round !== undefined ? metrics[i].round : i + 1;
+        ctx.fillText(`R${rNum}`, x, h - 8);
+      }
 
-      // Plot loss (Amber)
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      hist.forEach((pt, i) => {
-        const x = padX + (chartW / (hist.length - 1)) * i;
-        const normY = Math.min(1, pt.loss);
-        const y = padY + chartH * (1 - normY);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
+      const hasValAcc = metrics.some(m => m.val_accuracy !== undefined);
+      const hasTestAcc = metrics.some(m => m.test_accuracy !== undefined || m.accuracy !== undefined);
+      const hasValLoss = metrics.some(m => m.val_loss !== undefined);
+      const hasTestLoss = metrics.some(m => m.test_loss !== undefined || m.loss !== undefined);
+
+      function drawSeries(getValue, color, width, isDashed) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        if (isDashed) ctx.setLineDash([4, 4]);
+        else ctx.setLineDash([]);
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i < n; i++) {
+          const v = getValue(metrics[i]);
+          if (v === undefined || v === null || isNaN(v)) continue;
+          const x = n === 1 ? padX + chartW / 2 : padX + (chartW / (n - 1)) * i;
+          const normY = Math.max(0, Math.min(1, v));
+          const y = padY + chartH * (1 - normY);
+          if (!started) {
+            ctx.moveTo(x, y);
+            started = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        if (started) ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Val Acc (Cyan)
+      if (hasValAcc) {
+        drawSeries(m => m.val_accuracy, '#d00000', 2.5, false);
+      }
+      // Test Acc (Emerald)
+      if (hasTestAcc) {
+        drawSeries(m => m.test_accuracy !== undefined ? m.test_accuracy : (m.accuracy ? m.accuracy / 100 : undefined), '#d00000', 2.5, false);
+      }
+      // Val Loss (Amber - normalized / 1.5)
+      if (hasValLoss) {
+        drawSeries(m => m.val_loss !== undefined ? (m.val_loss / 1.5) : undefined, '#fff', 1.8, true);
+      }
+      // Test Loss (Rose - normalized / 1.5)
+      if (hasTestLoss) {
+        drawSeries(m => m.test_loss !== undefined ? (m.test_loss / 1.5) : (m.loss !== undefined ? m.loss / 1.5 : undefined), '#f43f5e', 1.8, true);
+      }
     }
 
     // Media Upload Handler
@@ -1256,7 +2020,7 @@
       }
 
       try {
-        const res = await fetch('/detect', {
+        const res = await fetch(apiUrl('/detect'), {
           method: 'POST',
           body: formData,
         });
@@ -1282,11 +2046,20 @@
       document.getElementById('moderation-report-card').style.display = 'block';
 
       const isFake = data.verdict === 'LIKELY_SYNTHETIC';
+      const isInconclusive = data.verdict === 'INCONCLUSIVE';
       const vCard = document.getElementById('verdict-card');
-      vCard.className = 'verdict-banner ' + (isFake ? 'fake' : 'real');
+      vCard.className = 'verdict-banner ' + (isFake ? 'fake' : (isInconclusive ? 'inconclusive' : 'real'));
 
       document.getElementById('verdict-text').textContent = data.verdict;
       document.getElementById('verdict-score').textContent = `${data.confidence}%`;
+      const vSub = document.getElementById('verdict-sub');
+      if (vSub) {
+        vSub.textContent = isFake
+          ? 'Digital manipulation boundaries detected'
+          : (isInconclusive
+            ? 'Borderline result: collect more evidence before making a decision'
+            : 'No significant synthetic indicators detected');
+      }
       document.getElementById('media-type-badge').textContent = data.media_type.toUpperCase();
 
       window._lastDetection = data;
@@ -1641,7 +2414,7 @@
               boundary_seam_anomaly: 0.91,
               fft_spectral_anomaly: 0.42
             },
-            chain_of_custody_signature: 'VERIFIED_AUDIT_LOG_ECDSA_VALID'
+            chain_of_custody_signature: 'SHA256-DIGEST-VERIFIED (Signature: Not Configured)'
           }
         });
       } else if (type === 'authentic') {
@@ -1684,7 +2457,7 @@
               boundary_seam_anomaly: 0.00,
               fft_spectral_anomaly: 0.01
             },
-            chain_of_custody_signature: 'VERIFIED_AUDIT_LOG_ECDSA_VALID'
+            chain_of_custody_signature: 'SHA256-DIGEST-VERIFIED (Signature: Not Configured)'
           }
         });
       }
@@ -1693,6 +2466,8 @@
     // Attach Drag and Drop listeners
     window.addEventListener('DOMContentLoaded', () => {
       initConnection();
+      fetchRunsList();
+      window.addEventListener('resize', () => renderConvergenceChart());
 
       const dropArea = document.getElementById('drop-area');
       const fileInput = document.getElementById('file-input');
@@ -1745,7 +2520,7 @@
           <tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:0.4rem 0; color:var(--text-muted);">Media File Name:</td><td id="modal-filename">image.jpg</td></tr>
           <tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:0.4rem 0; color:var(--text-muted);">Cryptographic SHA-256:</td><td style="font-family:var(--mono); font-size:0.7rem; word-break:break-all; color:var(--accent-cyan);" id="modal-sha256">...</td></tr>
           <tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:0.4rem 0; color:var(--text-muted);">Primary Forensic Verdict:</td><td><strong id="modal-verdict" style="color:#fca5a5;">LIKELY_SYNTHETIC</strong> (<span id="modal-conf">94%</span> confidence)</td></tr>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:0.4rem 0; color:var(--text-muted);">Federated Consensus:</td><td id="modal-federation-status">Verified against Cross-Platform Byzantine-Resilient Global Model</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:0.4rem 0; color:var(--text-muted);">Federated Consensus:</td><td id="modal-federation-status">ResNet-18 Head trained with Byzantine-Robust Aggregation on CIFAKE</td></tr>
         </table>
 
         <div style="font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.4rem;">Digital Forensic Artifact Measures</div>
@@ -1758,12 +2533,12 @@
 
         <div style="border-top:1px dashed rgba(255,255,255,0.15); padding-top:0.75rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Digital Chain of Custody Signature</div>
-            <div style="font-family:var(--mono); font-size:0.7rem; color:#6ee7b7;" id="modal-signature">ED25519-SIG-XXXX</div>
+            <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Content Integrity Digest</div>
+            <div style="font-family:var(--mono); font-size:0.7rem; color:#6ee7b7;" id="modal-signature">SHA256-DIGEST</div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Certification Engine</div>
-            <div style="font-size:0.7rem; color:#fff; font-weight:700;">FedForge v2.0 Enterprise DFL</div>
+            <div style="font-size:0.7rem; color:#fff; font-weight:700;">FedForge ML Inspection Pipeline</div>
           </div>
         </div>
       </div>

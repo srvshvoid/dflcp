@@ -359,9 +359,9 @@ class PixelForensics:
             "confidence_rating": f"{round(max(score, 1.0 - score) * 100, 1)}%",
             "faces_analyzed": faces_count,
             "pixel_artifact_breakdown": metrics,
-            "federated_defense_status": "Verified against Cross-Platform Byzantine-Resilient Global Model",
-            "chain_of_custody_signature": f"ED25519-SIG-{uuid.uuid4().hex[:16].upper()}",
-            "evidence_authenticity": "Digitally certified by FedForge Forensic Engine v2.0",
+            "federated_defense_status": "ResNet-18 linear head trained with Byzantine-robust aggregation on CIFAKE benchmark",
+            "chain_of_custody_signature": f"SHA256-{sha256_hash[:16].upper()} (Digital signature: not configured)",
+            "evidence_authenticity": "Evaluated with ResNet-18 model checkpoint and forensic artifact analysis",
         }
 
     @staticmethod

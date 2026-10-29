@@ -9,6 +9,8 @@ PostgreSQL, Redis, and live WebSocket events remain pending integrations; the
 
 from dataclasses import dataclass
 import json
+import os
+import secrets
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -85,7 +87,9 @@ class RunRepository:
             if not path.is_dir() or not provenance_path.is_file():
                 continue
             provenance = self._read_json(provenance_path)
-            metrics = self._read_jsonl(path / "metrics.jsonl")
+            rounds_data = self._read_jsonl(path / "rounds.jsonl") or self._read_jsonl(path / "metrics.jsonl")
+            final_metrics = self._read_json(path / "metrics.json") if (path / "metrics.json").is_file() else None
+            is_real = (path / "checkpoint.pt").is_file() and (path / "manifest.json").is_file()
             summaries.append(
                 {
                     # The directory is the stable URL key. A caller can still
@@ -96,10 +100,11 @@ class RunRepository:
                     "seed": provenance.get("seed"),
                     "git_commit": provenance.get("git_commit"),
                     "lock_hash": provenance.get("lock_hash"),
-                    "created_at": provenance.get("created_at"),
-                    "status": "replay",
-                    "metrics_count": len(metrics),
-                    "evidence_status": "synthetic-unverified",
+                    "created_at": provenance.get("timestamp_utc", provenance.get("created_at")),
+                    "status": "completed" if (path / "checkpoint.pt").is_file() else "replay",
+                    "metrics_count": len(rounds_data),
+                    "final_metrics": final_metrics,
+                    "evidence_status": "real-measured" if is_real else "synthetic-unverified",
                 }
             )
         return summaries
@@ -109,18 +114,26 @@ class RunRepository:
 
         path = self._run_path(run_id)
         provenance = self._read_json(path / "provenance.json")
+        rounds_data = self._read_jsonl(path / "rounds.jsonl") or self._read_jsonl(path / "metrics.jsonl")
+        final_metrics = self._read_json(path / "metrics.json") if (path / "metrics.json").is_file() else None
+        config_data = self._read_json(path / "config.json") if (path / "config.json").is_file() else None
+        is_real = (path / "checkpoint.pt").is_file() and (path / "manifest.json").is_file()
         return {
             "id": run_id,
             "provenance": provenance,
-            "metrics": self._read_jsonl(path / "metrics.jsonl"),
-            "checkpoint_available": (path / "checkpoint.json").is_file(),
-            "evidence_status": "synthetic-unverified",
+            "config": config_data,
+            "metrics": rounds_data,
+            "final_metrics": final_metrics,
+            "checkpoint_available": (path / "checkpoint.pt").is_file() or (path / "checkpoint.json").is_file(),
+            "evidence_status": "real-measured" if is_real else "synthetic-unverified",
         }
 
     def rounds(self, run_id: str) -> list[dict[str, Any]]:
         """Return only the JSONL round records for one run."""
 
         path = self._run_path(run_id)
+        if (path / "rounds.jsonl").is_file():
+            return self._read_jsonl(path / "rounds.jsonl")
         return self._read_jsonl(path / "metrics.jsonl")
 
     def privacy_payload_manifest(self) -> dict[str, Any]:
@@ -218,10 +231,23 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
     from ..vision.detector import MediaDetectionPipeline
 
     repository = RunRepository(runs_root)
-    pipeline = MediaDetectionPipeline()
+    pipeline = MediaDetectionPipeline(runs_root=runs_root)
     engine = get_federated_engine()
 
     app = FastAPI(title="FedForge API", version="0.2.0")
+    api_token = os.environ.get("FEDFORGE_API_TOKEN")
+    protected_methods = {"POST", "PUT", "PATCH", "DELETE"}
+    protected_paths = {"/privacy/payload-manifest", "/federation/state"}
+
+    @app.middleware("http")
+    async def authenticate(request: Request, call_next: Any) -> Any:
+        if api_token and (request.method in protected_methods or request.url.path in protected_paths):
+            supplied = request.headers.get("authorization", "")
+            if not supplied.startswith("Bearer ") or not secrets.compare_digest(
+                supplied[7:], api_token
+            ):
+                return JSONResponse(status_code=401, content={"detail": "Bearer authentication required"})
+        return await call_next(request)
 
     app.add_middleware(
         CORSMiddleware,
@@ -233,7 +259,12 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
 
     @app.get("/health")
     def health() -> dict[str, Any]:
-        return {"status": "ok", "mode": "production-live", "live_services": True}
+        return {
+            "status": "ok",
+            "mode": "production-live",
+            "live_services": True,
+            "authentication": "bearer" if api_token else "disabled (set FEDFORGE_API_TOKEN)",
+        }
 
     @app.get("/runs")
     def runs() -> list[dict[str, Any]]:
@@ -259,6 +290,11 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
 
     @app.post("/detect")
     async def detect(request: Request) -> JSONResponse:
+        if not pipeline.is_trained or pipeline.model is None:
+            raise HTTPException(
+                status_code=503,
+                detail="No trained model checkpoint found in runs/. Run training (python -m fedforge.ml.train or python scripts/run_fl.py) first."
+            )
         content_type = request.headers.get("content-type", "")
         if "multipart/form-data" in content_type:
             form = await request.form()
@@ -336,6 +372,28 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
             engine.secagg_enabled = bool(body["secagg_enabled"])
         return engine.get_state()
 
+    @app.post("/federation/client-update")
+    async def federation_client_update(request: Request) -> dict[str, Any]:
+        """Accept one validated client model update for the local prototype."""
+        try:
+            body = await request.json()
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail="Request body must be valid JSON") from exc
+        if not isinstance(body, Mapping):
+            raise HTTPException(status_code=400, detail="JSON object required")
+        raw_parameters = body.get("parameters")
+        if not isinstance(raw_parameters, list):
+            raise HTTPException(status_code=400, detail="parameters must be a JSON array")
+        try:
+            update = engine.receive_model_update(
+                client_id=str(body.get("client_id", "")),
+                parameters=[float(value) for value in raw_parameters],
+                num_examples=int(body.get("num_examples", 0)),
+            )
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        return {"accepted": True, "update": update, "state": engine.get_state()["update_flow"]}
+
     @app.post("/federation/security-demo")
     def federation_security_demo() -> dict[str, Any]:
         return engine.run_security_experiment()
@@ -374,4 +432,3 @@ def create_fastapi_app(runs_root: Path | str = "runs") -> Any:
 
 
 __all__ = ["RunNotFoundError", "RunRepository", "create_fastapi_app", "score_smoke_features"]
-

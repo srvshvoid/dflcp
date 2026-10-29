@@ -1,21 +1,36 @@
 [build-system]
-# The CPU smoke slice has no third-party build or runtime dependency.  The
-# Makefile uses --no-build-isolation so this metadata can be installed from a
-# clean, offline Python 3.11 environment.
-requires = []
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "fedforge"
-version = "0.1.0"
-description = "An honest, reproducible shell for FedForge federated-learning experiments"
+version = "0.2.0"
+description = "A research and course project demonstrating federated learning on CIFAKE with Byzantine attacks and robust defenses."
 readme = "README.md"
-requires-python = "==3.11.2"
-license = { text = "Research prototype; see docs/ETHICS.md" }
+requires-python = ">=3.10"
+license = { text = "MIT" }
 authors = [
   { name = "FedForge contributors" },
 ]
-dependencies = []
+dependencies = [
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.22.0",
+  "pydantic>=2.0.0",
+  "numpy>=1.24.0",
+  "pillow>=9.5.0",
+  "scikit-learn>=1.2.0",
+  "requests>=2.28.0",
+  "websockets>=11.0",
+  "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0.0",
+  "httpx>=0.24.0",
+]
 
 [project.scripts]
 fedforge = "fedforge.simulator:main"
@@ -30,4 +45,3 @@ include = ["fedforge*"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-

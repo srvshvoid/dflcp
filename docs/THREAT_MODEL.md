@@ -51,8 +51,11 @@ claim to protect production secrets.
 - package setup uses an empty lockfile and offline pip flags, so optional
   network services are not silently pulled into the smoke path.
 
-These controls do not provide differential privacy, secure aggregation,
-robustness, authentication, authorization, encryption, or deletion guarantees.
+The local process prototype adds signed envelopes, optional pairwise masking,
+optional client clipping/noise, and configurable API bearer authentication.
+These controls do not provide a production differential-privacy budget,
+dropout-tolerant secure aggregation, key rotation, authorization roles,
+encryption unless TLS is configured, or deletion guarantees.
 
 ## Required controls before real deployment
 
